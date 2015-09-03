@@ -6,6 +6,8 @@ import backend.spiel.Spiel;
 
 public class Laeufer extends Figur {
 
+	public Laeufer(){
+	}
 	public Laeufer(Spiel spiel,boolean istWeiss) {
 		super(spiel,"L",istWeiss);
 	}

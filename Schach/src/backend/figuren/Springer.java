@@ -7,6 +7,8 @@ import backend.spiel.Spiel;
 
 public class Springer extends Figur {
 
+	public Springer(){
+	}
 	public Springer(Spiel spiel,boolean istWeiss) {
 		super(spiel,"S",istWeiss);
 	}

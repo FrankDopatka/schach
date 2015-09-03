@@ -6,6 +6,8 @@ import backend.spiel.Spiel;
 
 public class Koenig extends Figur {
 
+	public Koenig(){
+	}
 	public Koenig(Spiel spiel,boolean istWeiss) {
 		super(spiel,"K",istWeiss);
 	}

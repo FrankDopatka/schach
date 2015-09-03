@@ -6,6 +6,8 @@ import backend.spiel.Spiel;
 
 public class Turm extends Figur {
 
+	public Turm(){
+	}
 	public Turm(Spiel spiel,boolean istWeiss) {
 		super(spiel,"T",istWeiss);
 	}

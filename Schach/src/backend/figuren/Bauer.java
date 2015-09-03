@@ -8,6 +8,8 @@ import backend.spiel.Spiel;
 
 public class Bauer extends Figur {
 
+	public Bauer(){
+	}
 	public Bauer(Spiel spiel,boolean istWeiss) {
 		super(spiel,"B",istWeiss);
 	}

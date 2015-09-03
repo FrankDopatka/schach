@@ -15,10 +15,12 @@ public class GuiEventHandler implements ActionListener,MouseListener{
 	public void actionPerformed(ActionEvent ev) {
 		Object quelle=ev.getSource();
 		if (quelle.equals(Gui.mSpielNeu)){
-			
+			gui.neuesSpiel();
+			gui.getSpiel().setzeStartbelegung();
+			gui.setBrett(gui.getSpiel().getBild());
 		} 
 		if (quelle.equals(Gui.mSpielLaden)){
-
+			gui.ladenSpiel("spiel.xml");
 		}
 		if (quelle.equals(Gui.mSpielSpeichern)){
 			System.out.println(gui.getSpiel().speichern("spiel.xml"));

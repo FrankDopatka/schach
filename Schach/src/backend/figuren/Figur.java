@@ -17,7 +17,6 @@ import backend.spiel.Feld;
 import backend.spiel.Spiel;
 
 public abstract class Figur {
-
 	private static BufferedImage[] figurenWeiss=new BufferedImage[6];
 	private static BufferedImage[] figurenSchwarz=new BufferedImage[6];
 	private Spiel spiel;
@@ -38,12 +37,31 @@ public abstract class Figur {
 		}
 	}
 	
+	private static BufferedImage toBufferedImage(Image img){
+		if (img instanceof BufferedImage) return (BufferedImage) img;
+    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+    Graphics2D bGr = bimage.createGraphics();
+    bGr.drawImage(img, 0, 0, null);
+    bGr.dispose();
+    return bimage;
+	}
+
 	public Figur(){
 	}
 	
 	public Figur(Spiel spiel,String kuerzel,boolean istWeiss){
+		setSpiel(spiel);
+		setKuerzel(kuerzel);
+		setFarbe(istWeiss);
+	}
+	
+	public void setSpiel(Spiel spiel){
 		this.spiel=spiel;
+	}
+	public void setKuerzel(String kuerzel){
 		this.kuerzel=kuerzel;
+	}
+	public void setFarbe(boolean istWeiss){
 		this.istWeiss=istWeiss;
 	}
 	
@@ -77,8 +95,6 @@ public abstract class Figur {
 			return true;
 		}
 	}
-	
-	
 	
 	// die Zuege aus der Liste entfernen, durch die ich selbst im Schach waere
 	protected void removeZuegeSelbstImSchach(ArrayList<String> felderZiel,Figur meineFigur){
@@ -118,7 +134,7 @@ public abstract class Figur {
 		else
 			bildFigur=figurenSchwarz[figurTyp.ordinal()];
 		if (istGeschlagen())
-			bildFigur=Spiel.toBufferedImage(bildFigur.getScaledInstance(bildFigur.getWidth()/2,bildFigur.getHeight()/2,Image.SCALE_SMOOTH));
+			bildFigur=toBufferedImage(bildFigur.getScaledInstance(bildFigur.getWidth()/2,bildFigur.getHeight()/2,Image.SCALE_SMOOTH));
 		g.drawImage(bildFigur,2,2,null);
 		g.dispose();
 		return im;

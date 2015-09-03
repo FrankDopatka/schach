@@ -5,8 +5,11 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import daten.*;
@@ -22,6 +25,57 @@ public class Spiel {
 		brett=new Brett();
 	}
 	
+	
+	
+	public Spiel(String pfad) {
+		this();
+		BufferedReader br=null;
+		try {
+			pfad=URLDecoder.decode(""+pfad,"ISO-8859-1");
+			StringBuffer spielXML=new StringBuffer();
+			br=new BufferedReader(new FileReader(pfad));
+			String zeile=br.readLine(); 
+	    while (zeile!=null){
+	    	spielXML.append(zeile+"/n");
+	      zeile=br.readLine(); 
+	    } 
+	    ArrayList<D> spielDaten=Xml.toArray(spielXML.toString());    
+	    int counter=0;
+	    // Daten des Spiels
+	    D_Spiel d_Spiel=(D_Spiel)spielDaten.get(counter);
+	    weissAmZug=d_Spiel.getBool("weissAmZug");
+	    counter++;
+	    // Daten der Figuren
+	    figuren.clear();
+	    for(int i=1;i<=32;i++){
+	    	D_Figur d_Figur=(D_Figur)spielDaten.get(counter);
+	    	@SuppressWarnings("unchecked")
+				Class<Figur> c=(Class<Figur>)Class.forName(Parameter.pfadKlassenFiguren+d_Figur.getString("typ"));
+	    	Figur figur=(Figur)c.newInstance();
+	    	figur.setSpiel(this);
+	    	figur.setKuerzel(d_Figur.getString("kuerzel"));
+	    	figur.setFarbe(d_Figur.getBool("istWeiss"));
+	    	figur.setFeld(brett.getFeld(d_Figur.getString("feld")));
+	    	figuren.add(figur);
+	    	counter++;
+	    }
+	    
+		}
+		catch (Exception e){
+			e.printStackTrace();
+//			throw new RuntimeException("Fehler beim Laden des Spiels von "+pfad+": "+e.getMessage());
+		} 	
+		finally{
+			try {
+				br.close();
+			} catch (Exception e) {}			
+		}
+	    
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+
 	public void setzeStartbelegung(){
 		Figur figur;
 		for (int i=1;i<=8;i++){
@@ -31,12 +85,10 @@ public class Spiel {
 			figur=new Bauer(this,false);
 			figur.setFeld(brett.getFeld(i,7)); // schwarze Bauern
 			figuren.add(figur);
-		}
-		
-		// restliche Figuren
+		}	
 		int x=1;
 		boolean weiss=true;
-		for (int i=1;i<=2;i++){
+		for (int i=1;i<=2;i++){ // restliche Figuren
 			addFigur(new Turm(this,weiss),"a"+x);
 			addFigur(new Springer(this,weiss),"b"+x);
 			addFigur(new Laeufer(this,weiss),"c"+x);
@@ -48,7 +100,6 @@ public class Spiel {
 			x=8; 
 			weiss=false;
 		} 
-		
 	}
 	
 	private void addFigur(Figur figur,String position){
@@ -67,8 +118,6 @@ public class Spiel {
 		g.setColor(Parameter.farbeBrettHintergrund);
 		g.fillRect(0,0,im.getWidth(null),im.getHeight(null));
 		g.drawImage(brett.getBild(),20,70,null);
-
-		
 		for (int i=1;i<=8;i++){
 			g.setFont(new Font("Arial",Font.BOLD,18));
 			g.setColor(new Color(0,0,0));
@@ -77,12 +126,10 @@ public class Spiel {
 			g.drawString(Brett.toZeichen(i),15+groesse/2+groesse*(i-1),63);
 			g.drawString(Brett.toZeichen(i),15+groesse/2+groesse*(i-1),90+groesse*8);
 		}
-
 		// weisse geschlagene Figuren
 		g.drawImage(getBildGeschlagen(true),20,10,null);
 		// schwarze geschlagene Figuren
 		g.drawImage(getBildGeschlagen(false),20,groesse*8+100,null);
-		
 		g.dispose();
 		return im;
 	}
@@ -122,15 +169,6 @@ public class Spiel {
 		return im;
 	}
 	
-	public static BufferedImage toBufferedImage(Image img){
-		if (img instanceof BufferedImage) return (BufferedImage) img;
-    BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-    Graphics2D bGr = bimage.createGraphics();
-    bGr.drawImage(img, 0, 0, null);
-    bGr.dispose();
-    return bimage;
-	}
-
 	public boolean weissAmZug() {
 		return weissAmZug;
 	}
@@ -192,7 +230,7 @@ public class Spiel {
 		if (geschlageneFigur!=null) geschlageneFigur.setFeld(getBrett().getFeld(sFeldZiel));
 	}
 
-	// TODO bin ich selbst im Schach, wenn ich mich von dieser Position auf die neue Position bewege?
+	// bin ich selbst im Schach, wenn ich mich von dieser Position auf die neue Position bewege?
 	public boolean binIchImSchachDurchZug(String sFeldStart,String sFeldZiel){
 		Figur ziehendeFigur=getBrett().getFeld(sFeldStart).getFigur();
 		Figur geschlageneFigur=zieheTestweise(ziehendeFigur,sFeldStart,sFeldZiel);
@@ -246,8 +284,7 @@ public class Spiel {
 			pw.close();			
 		}
 	}
-	
-	
+
 	public D_Spiel toD(){
 		D_Spiel d_Spiel=new D_Spiel();
 		d_Spiel.setBool("weissAmZug",weissAmZug());
@@ -263,5 +300,4 @@ public class Spiel {
 		}
 		return xml.toString();
 	}
-	
 }

@@ -71,9 +71,6 @@ public class Gui extends JFrame{
 		panelHaupt.setLayout(new BorderLayout());
 		panelMenu.setLayout(new BorderLayout());
 		
-		spiel=new Spiel();
-		spiel.setzeStartbelegung();
-		
 		mSpiel.add(mSpielNeu);
 		mSpielNeu.addActionListener(events);
 		mSpiel.add(mSpielLaden);
@@ -95,8 +92,7 @@ public class Gui extends JFrame{
 		sued.add(new JButton("HALLO?"));
 		west.add(new JButton("HALLO?"));
 		ost.add(new JButton("HALLO?"));
-		
-		
+
 		panelHaupt.add(nord,BorderLayout.NORTH);
 		panelHaupt.add(sued,BorderLayout.SOUTH);
 		panelHaupt.add(west,BorderLayout.WEST);
@@ -108,6 +104,9 @@ public class Gui extends JFrame{
 		setSize(650,750);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		neuesSpiel();
+		spiel.setzeStartbelegung();
 		setBrett(spiel.getBild());
 	}
 
@@ -120,10 +119,19 @@ public class Gui extends JFrame{
 		brett.setIcon(new ImageIcon(bildNeu));		
 	}
 	
+	public void neuesSpiel(){
+		spiel=new Spiel();
+	}
+
 	public Spiel getSpiel(){
 		return spiel;
 	}
 	
+	public void ladenSpiel(String pfad){
+		spiel=new Spiel(pfad);
+		setBrett(spiel.getBild());
+	}
+
 	public void klick(int x,int y){
 		if ((x==0)||(y==0)) return;
 		if ((felderErlaubt!=null)&&felderErlaubt.contains(toKuerzel(x,y))){
