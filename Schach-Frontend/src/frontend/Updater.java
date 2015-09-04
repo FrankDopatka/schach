@@ -32,9 +32,7 @@ public class Updater extends Thread{
 				}
 				Thread.sleep(timer*1000);
 			}
-			catch (Exception e){
-				e.printStackTrace();
-			}
+			catch (Exception e){}
 		}
 	}
 }
