@@ -52,14 +52,23 @@ public class Brett {
 		}
 	}
 
-	public Image getBild(){
+	public Image getBild(boolean vorneWeiss){
 		int groesse=Parameter.groesseFeld;
-		Image im=new BufferedImage(groesse*8,groesse*8,BufferedImage.TYPE_INT_ARGB);
+		Image im=new BufferedImage(groesse*8,groesse*8,BufferedImage.TYPE_INT_RGB);
 		Graphics2D g=(Graphics2D)im.getGraphics();
-		for(int i=1;i<=8;i++){
-			for(int j=1;j<=8;j++){
-				g.drawImage(feld[i][j].getBild(),groesse*(i-1),groesse*(8-j),null);
-			}
+		if (vorneWeiss){
+			for(int i=1;i<=8;i++){
+				for(int j=1;j<=8;j++){
+					g.drawImage(feld[i][j].getBild(),groesse*(i-1),groesse*(8-j),null);
+				}
+			}			
+		}
+		else{
+			for(int i=1;i<=8;i++){
+				for(int j=1;j<=8;j++){
+					g.drawImage(feld[i][j].getBild(),groesse*(8-i),groesse*(j-1),null);
+				}
+			}						
 		}
 		g.dispose();
 		return im;

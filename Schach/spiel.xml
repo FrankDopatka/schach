@@ -2,7 +2,8 @@
 <!DOCTYPE properties SYSTEM "http://www.frankdopatka.de/dtd/propertiesarray.dtd">
 <propertiesarray>
 <properties>
-<entry key="weissAmZug">false</entry>
+<entry key="zugZaehler">4</entry>
+<entry key="weissAmZug">true</entry>
 <entry key="klasse">D_Spiel</entry>
 </properties>
 <properties>
@@ -10,9 +11,9 @@
 <entry key="typ">Bauer</entry>
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
-<entry key="istGeschlagen">true</entry>
+<entry key="istGeschlagen">false</entry>
 <entry key="bereitsBewegt">false</entry>
-<entry key="feld"/>
+<entry key="feld">a2</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -29,26 +30,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld">a4</entry>
-</properties>
-<properties>
-<entry key="kuerzel">B</entry>
-<entry key="typ">Bauer</entry>
-<entry key="istWeiss">false</entry>
-<entry key="klasse">D_Figur</entry>
-<entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld">d3</entry>
-</properties>
-<properties>
-<entry key="kuerzel">B</entry>
-<entry key="typ">Bauer</entry>
-<entry key="istWeiss">true</entry>
-<entry key="klasse">D_Figur</entry>
-<entry key="istGeschlagen">true</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld"/>
+<entry key="bereitsBewegt">false</entry>
+<entry key="feld">b2</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -57,7 +40,7 @@
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
 <entry key="bereitsBewegt">false</entry>
-<entry key="feld">c7</entry>
+<entry key="feld">b7</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -66,6 +49,24 @@
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
 <entry key="bereitsBewegt">false</entry>
+<entry key="feld">c2</entry>
+</properties>
+<properties>
+<entry key="kuerzel">B</entry>
+<entry key="typ">Bauer</entry>
+<entry key="istWeiss">false</entry>
+<entry key="klasse">D_Figur</entry>
+<entry key="istGeschlagen">false</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">c6</entry>
+</properties>
+<properties>
+<entry key="kuerzel">B</entry>
+<entry key="typ">Bauer</entry>
+<entry key="istWeiss">true</entry>
+<entry key="klasse">D_Figur</entry>
+<entry key="istGeschlagen">false</entry>
+<entry key="bereitsBewegt">true</entry>
 <entry key="feld">d4</entry>
 </properties>
 <properties>
@@ -74,7 +75,7 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
+<entry key="bereitsBewegt">true</entry>
 <entry key="feld">d5</entry>
 </properties>
 <properties>
@@ -83,8 +84,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">e2</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">e3</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -93,7 +94,7 @@
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
 <entry key="bereitsBewegt">false</entry>
-<entry key="feld">e6</entry>
+<entry key="feld">e7</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -173,17 +174,17 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld">d2</entry>
+<entry key="bereitsBewegt">false</entry>
+<entry key="feld">c1</entry>
 </properties>
 <properties>
 <entry key="kuerzel">D</entry>
 <entry key="typ">Dame</entry>
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
-<entry key="istGeschlagen">true</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld"/>
+<entry key="istGeschlagen">false</entry>
+<entry key="bereitsBewegt">false</entry>
+<entry key="feld">d1</entry>
 </properties>
 <properties>
 <entry key="kuerzel">K</entry>
@@ -244,9 +245,9 @@
 <entry key="typ">Laeufer</entry>
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
-<entry key="istGeschlagen">true</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld"/>
+<entry key="istGeschlagen">false</entry>
+<entry key="bereitsBewegt">false</entry>
+<entry key="feld">c8</entry>
 </properties>
 <properties>
 <entry key="kuerzel">D</entry>
@@ -292,6 +293,42 @@
 <entry key="istGeschlagen">false</entry>
 <entry key="bereitsBewegt">false</entry>
 <entry key="feld">h8</entry>
+</properties>
+<properties>
+<entry key="zeitstempel">1441360650699</entry>
+<entry key="feldZiel">d4</entry>
+<entry key="figur">B</entry>
+<entry key="feldStart">d2</entry>
+<entry key="nummer">1</entry>
+<entry key="istWeiss">true</entry>
+<entry key="klasse">D_Zug</entry>
+</properties>
+<properties>
+<entry key="zeitstempel">1441360654684</entry>
+<entry key="feldZiel">d5</entry>
+<entry key="figur">B</entry>
+<entry key="feldStart">d7</entry>
+<entry key="nummer">2</entry>
+<entry key="istWeiss">false</entry>
+<entry key="klasse">D_Zug</entry>
+</properties>
+<properties>
+<entry key="zeitstempel">1441360658686</entry>
+<entry key="feldZiel">e3</entry>
+<entry key="figur">B</entry>
+<entry key="feldStart">e2</entry>
+<entry key="nummer">3</entry>
+<entry key="istWeiss">true</entry>
+<entry key="klasse">D_Zug</entry>
+</properties>
+<properties>
+<entry key="zeitstempel">1441360661047</entry>
+<entry key="feldZiel">c6</entry>
+<entry key="figur">B</entry>
+<entry key="feldStart">c7</entry>
+<entry key="nummer">4</entry>
+<entry key="istWeiss">false</entry>
+<entry key="klasse">D_Zug</entry>
 </properties>
 </propertiesarray>
 

@@ -142,4 +142,9 @@ public class D{
 			throw new RuntimeException("Daten clone: "+e.getMessage());
 		}
 	}
+	
+	public String toXml(){
+		return(Xml.fromD(this));
+	}
+	
 }

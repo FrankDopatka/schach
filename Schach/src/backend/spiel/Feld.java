@@ -70,7 +70,7 @@ public class Feld {
 	
 	public Image getBild(){
 		if (figur!=null) return figur.getBild();
-		Image im=new BufferedImage(Parameter.groesseFeld,Parameter.groesseFeld,BufferedImage.TYPE_INT_ARGB);
+		Image im=new BufferedImage(Parameter.groesseFeld,Parameter.groesseFeld,BufferedImage.TYPE_INT_RGB);
 		Graphics2D g=(Graphics2D)im.getGraphics();
 		if (istSchwarz())
 			g.setColor(Parameter.farbeBrettSchwarz);

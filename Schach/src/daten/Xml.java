@@ -69,7 +69,7 @@ public class Xml {
 				xmlTeil=xmlTeil.replaceAll("/n","");
 				Properties p=new Properties();
 				p.loadFromXML(new ByteArrayInputStream(xmlTeil.getBytes()));
-				@SuppressWarnings("rawtypes")
+				@SuppressWarnings("rawtypes") 
 				Class c=Class.forName(Parameter.pfadKlassenDaten+p.getProperty("klasse"));
 				D d=(D)c.newInstance();
 				d.setProperties(p);
