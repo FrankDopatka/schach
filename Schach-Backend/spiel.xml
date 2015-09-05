@@ -2,9 +2,13 @@
 <!DOCTYPE properties SYSTEM "http://www.frankdopatka.de/dtd/propertiesarray.dtd">
 <propertiesarray>
 <properties>
-<entry key="zugZaehler">4</entry>
+<entry key="zugZaehler">16</entry>
 <entry key="weissAmZug">true</entry>
+<entry key="weissSchachMatt">false</entry>
+<entry key="schwarzImSchach">false</entry>
+<entry key="weissImSchach">false</entry>
 <entry key="klasse">D_Spiel</entry>
+<entry key="schwarzSchachMatt">false</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -57,8 +61,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">true</entry>
-<entry key="feld">c6</entry>
+<entry key="bereitsBewegt">false</entry>
+<entry key="feld">c7</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -93,8 +97,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">e7</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">e6</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>
@@ -165,8 +169,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">b1</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">b5</entry>
 </properties>
 <properties>
 <entry key="kuerzel">L</entry>
@@ -174,8 +178,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">c1</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">f4</entry>
 </properties>
 <properties>
 <entry key="kuerzel">D</entry>
@@ -183,8 +187,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">d1</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">d3</entry>
 </properties>
 <properties>
 <entry key="kuerzel">K</entry>
@@ -201,8 +205,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">f1</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">e2</entry>
 </properties>
 <properties>
 <entry key="kuerzel">S</entry>
@@ -210,8 +214,8 @@
 <entry key="istWeiss">true</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">g1</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">h3</entry>
 </properties>
 <properties>
 <entry key="kuerzel">T</entry>
@@ -237,8 +241,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">b8</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">b4</entry>
 </properties>
 <properties>
 <entry key="kuerzel">L</entry>
@@ -246,8 +250,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">c8</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">g4</entry>
 </properties>
 <properties>
 <entry key="kuerzel">D</entry>
@@ -255,8 +259,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">d8</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">d6</entry>
 </properties>
 <properties>
 <entry key="kuerzel">K</entry>
@@ -273,8 +277,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">f8</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">e7</entry>
 </properties>
 <properties>
 <entry key="kuerzel">S</entry>
@@ -282,8 +286,8 @@
 <entry key="istWeiss">false</entry>
 <entry key="klasse">D_Figur</entry>
 <entry key="istGeschlagen">false</entry>
-<entry key="bereitsBewegt">false</entry>
-<entry key="feld">g8</entry>
+<entry key="bereitsBewegt">true</entry>
+<entry key="feld">h6</entry>
 </properties>
 <properties>
 <entry key="kuerzel">T</entry>
@@ -295,40 +299,212 @@
 <entry key="feld">h8</entry>
 </properties>
 <properties>
-<entry key="zeitstempel">1441360650699</entry>
-<entry key="feldZiel">d4</entry>
-<entry key="figur">B</entry>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
 <entry key="feldStart">d2</entry>
+<entry key="figurBewegt">B</entry>
+<entry key="zeitstempel">1441482486046</entry>
+<entry key="feldZiel">d4</entry>
+<entry key="klasse">D_Zug</entry>
 <entry key="nummer">1</entry>
-<entry key="istWeiss">true</entry>
-<entry key="klasse">D_Zug</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
 </properties>
 <properties>
-<entry key="zeitstempel">1441360654684</entry>
-<entry key="feldZiel">d5</entry>
-<entry key="figur">B</entry>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
 <entry key="feldStart">d7</entry>
+<entry key="figurBewegt">B</entry>
+<entry key="zeitstempel">1441482488958</entry>
+<entry key="feldZiel">d5</entry>
+<entry key="klasse">D_Zug</entry>
 <entry key="nummer">2</entry>
-<entry key="istWeiss">false</entry>
-<entry key="klasse">D_Zug</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
 </properties>
 <properties>
-<entry key="zeitstempel">1441360658686</entry>
-<entry key="feldZiel">e3</entry>
-<entry key="figur">B</entry>
-<entry key="feldStart">e2</entry>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">d1</entry>
+<entry key="figurBewegt">D</entry>
+<entry key="zeitstempel">1441482491422</entry>
+<entry key="feldZiel">d3</entry>
+<entry key="klasse">D_Zug</entry>
 <entry key="nummer">3</entry>
-<entry key="istWeiss">true</entry>
-<entry key="klasse">D_Zug</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
 </properties>
 <properties>
-<entry key="zeitstempel">1441360661047</entry>
-<entry key="feldZiel">c6</entry>
-<entry key="figur">B</entry>
-<entry key="feldStart">c7</entry>
-<entry key="nummer">4</entry>
-<entry key="istWeiss">false</entry>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">d8</entry>
+<entry key="figurBewegt">D</entry>
+<entry key="zeitstempel">1441482493057</entry>
+<entry key="feldZiel">d6</entry>
 <entry key="klasse">D_Zug</entry>
+<entry key="nummer">4</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">c1</entry>
+<entry key="figurBewegt">L</entry>
+<entry key="zeitstempel">1441482496554</entry>
+<entry key="feldZiel">f4</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">5</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">c8</entry>
+<entry key="figurBewegt">L</entry>
+<entry key="zeitstempel">1441482499579</entry>
+<entry key="feldZiel">g4</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">6</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">b1</entry>
+<entry key="figurBewegt">S</entry>
+<entry key="zeitstempel">1441482502180</entry>
+<entry key="feldZiel">a3</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">7</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">b8</entry>
+<entry key="figurBewegt">S</entry>
+<entry key="zeitstempel">1441482504414</entry>
+<entry key="feldZiel">a6</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">8</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">g1</entry>
+<entry key="figurBewegt">S</entry>
+<entry key="zeitstempel">1441482506201</entry>
+<entry key="feldZiel">h3</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">9</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">g8</entry>
+<entry key="figurBewegt">S</entry>
+<entry key="zeitstempel">1441482508257</entry>
+<entry key="feldZiel">h6</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">10</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">e2</entry>
+<entry key="figurBewegt">B</entry>
+<entry key="zeitstempel">1441482511929</entry>
+<entry key="feldZiel">e3</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">11</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">e7</entry>
+<entry key="figurBewegt">B</entry>
+<entry key="zeitstempel">1441482514865</entry>
+<entry key="feldZiel">e6</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">12</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">f1</entry>
+<entry key="figurBewegt">L</entry>
+<entry key="zeitstempel">1441482516933</entry>
+<entry key="feldZiel">e2</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">13</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">f8</entry>
+<entry key="figurBewegt">L</entry>
+<entry key="zeitstempel">1441482518917</entry>
+<entry key="feldZiel">e7</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">14</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">a3</entry>
+<entry key="figurBewegt">S</entry>
+<entry key="zeitstempel">1441482532761</entry>
+<entry key="feldZiel">b5</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">15</entry>
+<entry key="figurBewegtIstWeiss">true</entry>
+</properties>
+<properties>
+<entry key="figurGeschlagen"/>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
+<entry key="bemerkung1"/>
+<entry key="feldStart">a6</entry>
+<entry key="figurBewegt">S</entry>
+<entry key="zeitstempel">1441482539903</entry>
+<entry key="feldZiel">b4</entry>
+<entry key="klasse">D_Zug</entry>
+<entry key="nummer">16</entry>
+<entry key="figurBewegtIstWeiss">false</entry>
 </properties>
 </propertiesarray>
 

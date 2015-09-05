@@ -54,6 +54,10 @@ public class EventHandler implements ActionListener,MouseListener{
 		int y=getKoordinateY(e.getY());
 		if ((x==0)||(y==0)) return;
 		if ((felderErlaubt!=null)&&felderErlaubt.contains(Frontend.toKuerzel(x,y))){
+			if (!frontend.ichBinAmZug()){
+				System.out.println("Sie sind nicht am Zug!");
+				return;
+			}
 			// 2. Klick auf ein Feld: Zug durchfuehren
 			backendSpiel.ziehe(feldMarkiert,Frontend.toKuerzel(x,y));
 			if (frontend.ichSpieleWeiss())

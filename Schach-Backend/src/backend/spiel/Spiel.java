@@ -18,13 +18,13 @@ import backend.figuren.*;
 
 public class Spiel {
 	private Brett brett=null;
-	private boolean weissAmZug=true;
 	private ArrayList<Figur> figuren=new ArrayList<Figur>();
 	private ArrayList<D_Zug> zugHistorie=new ArrayList<D_Zug>();
-	private int zugZaehler=0;
+	private D_Spiel d_Spiel=null;
 	
 	public Spiel(){
 		brett=new Brett();
+		d_Spiel=new D_Spiel();
 	}
 
 	public Spiel(String pfad) {
@@ -42,9 +42,7 @@ public class Spiel {
 	    ArrayList<D> spielDaten=Xml.toArray(spielXML.toString());    
 	    int counter=0;
 	    // Daten des Spiels
-	    D_Spiel d_Spiel=(D_Spiel)spielDaten.get(counter);
-	    weissAmZug=d_Spiel.getBool("weissAmZug");
-	    zugZaehler=d_Spiel.getInt("zugZaehler");
+	    d_Spiel=(D_Spiel)spielDaten.get(counter);
 	    counter++;
 	    // Daten der Figuren
 	    figuren.clear();
@@ -63,7 +61,7 @@ public class Spiel {
 	    }
 	    // Zughistorie
 	    zugHistorie.clear();
-	    for(int i=1;i<=zugZaehler;i++){
+	    for(int i=1;i<=d_Spiel.getInt("zugZaehler");i++){
 	    	D_Zug d_Zug=(D_Zug)spielDaten.get(counter);
 	    	zugHistorie.add(d_Zug);
 	    	counter++;
@@ -190,7 +188,7 @@ public class Spiel {
 		return ergebnis;
 	}
 	
-	public Image getBildGeschlagen(boolean weiss){
+	private Image getBildGeschlagen(boolean weiss){
 		int groesse=Parameter.groesseFeld;
 		Image im=new BufferedImage(groesse*8,groesse/2+4,BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g=(Graphics2D)im.getGraphics();
@@ -206,12 +204,34 @@ public class Spiel {
 	}
 	
 	public boolean weissAmZug() {
-		return weissAmZug;
+		return d_Spiel.getBool("weissAmZug");
+	}
+	public boolean weissImSchach() {
+		return d_Spiel.getBool("weissImSchach");
+	}
+	public boolean weissSchachMatt() {
+		return d_Spiel.getBool("weissSchachMatt");
 	}
 
 	public boolean schwarzAmZug() {
-		return !weissAmZug;
+		return !weissAmZug();
 	}
+	public boolean schwarzImSchach() {
+		return d_Spiel.getBool("schwarzImSchach");
+	}
+	public boolean schwarzSchachMatt() {
+		return d_Spiel.getBool("schwarzSchachMatt");
+	}
+	
+	public boolean istImSchach(boolean weiss) {
+		if (weiss) return weissImSchach();
+		return schwarzImSchach();
+	}
+	public boolean istSchachMatt(boolean weiss) {
+		if (weiss) return weissSchachMatt();
+		return schwarzSchachMatt();
+	}
+	
 
 	public void ziehe(String sFeldStart,String sFeldZiel){
 		Feld feldStart=getBrett().getFeld(sFeldStart);
@@ -229,38 +249,101 @@ public class Spiel {
 		// bin ich durch den eigenen Zug selbst im Schach?
 		if (binIchImSchachDurchZug(sFeldStart,sFeldZiel))
 			throw new RuntimeException("Der Zug von "+figurStart.getKuerzel()+sFeldStart+" nach "+sFeldZiel+" ist verboten, da Sie dadurch im Schach stehen wuerden!");		
-		// alles OK, Zug durchfuehren
+		// alles OK, Zug durchfuehren...
 		if (figurZiel!=null){
 			// eine Figur auf dem Zielfeld wird geschlagen
 			figurZiel.setFeld(null);
 		}
+		// Rochade
+		boolean istRochade=false;
+		if (figurStart instanceof Koenig){
+			int[] koordinatenAlt=Brett.fromKuerzel(sFeldStart);
+			int[] koordinatenNeu=Brett.fromKuerzel(sFeldZiel);
+			if ((koordinatenAlt[0]==koordinatenNeu[0]+2)||(koordinatenAlt[0]==koordinatenNeu[0]-2)){
+				istRochade=true;
+				// passender Turm Ziehen
+				Figur turm=null;
+				if (sFeldZiel.equals("c1")){
+					turm=getBrett().getFeld("a1").getFigur();
+					turm.setFeld(getBrett().getFeld("d1"));
+				}else if (sFeldZiel.equals("g1")){
+					turm=getBrett().getFeld("h1").getFigur();
+					turm.setFeld(getBrett().getFeld("f1"));
+				}else if (sFeldZiel.equals("c8")){
+					turm=getBrett().getFeld("a8").getFigur();
+					turm.setFeld(getBrett().getFeld("d8"));					
+				}else{
+					turm=getBrett().getFeld("h8").getFigur();				
+					turm.setFeld(getBrett().getFeld("f8"));					
+				}
+				
+				turm.bereitsBewegt();
+			}
+		}
+		
 		figurStart.setFeld(feldZiel);
 		figurStart.wurdeBewegt();
-		gezogen(figurStart,sFeldStart,sFeldZiel);
+		gezogen(figurStart,figurZiel,sFeldStart,sFeldZiel,istRochade);
 	}
 	
-	private void gezogen(Figur figur,String sFeldStart,String sFeldZiel) {
-		String s="";
-		if (!figur.istWeiss())
-			s+="WEISS";
-		else
-			s+="SCHWARZ";
-		if (binIchImSchach(!figur.istWeiss())){
-			if (getSchlagbareFelder(!figur.istWeiss(),true).size()==0)
-				System.out.println("SCHACHMATT "+s+"!");
-			else
-				System.out.println("SCHACH "+s+"!");
-		}
-		zugZaehler++;
+	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,boolean istRochade) {
 		D_Zug d_zug=new D_Zug();
-		d_zug.setInt("nummer",zugZaehler);
-		d_zug.setString("figur",figur.getKuerzel());
-		d_zug.setBool("istWeiss",figur.istWeiss());
+
+		// SCHACH
+		if (binIchImSchach(figurBewegt,!figurBewegt.istWeiss())){
+			if (getSchlagbareFelder(!figurBewegt.istWeiss(),false).size()==0){
+				if (!figurBewegt.istWeiss()){
+					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
+					d_Spiel.setBool("weissSchachMatt",true);					
+				}
+				else
+					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzSchachMatt);
+					d_Spiel.setBool("schwarzSchachMatt",true);
+			}
+			else{
+				if (!figurBewegt.istWeiss()){
+					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissImSchach);
+					d_Spiel.setBool("weissImSchach",true);					
+				}
+				else{
+					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzImSchach);
+					d_Spiel.setBool("schwarzImSchach",true);					
+				}
+			}
+		}
+		
+		// ROCHADE
+		if (istRochade) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.Rochade);
+		
+		// ZUGZAEHLER
+		d_Spiel.incInt("zugZaehler");
+
+		// ZUGDATEN
+		d_zug.setInt("nummer",d_Spiel.getInt("zugZaehler"));
+		d_zug.setString("figurBewegt",figurBewegt.getKuerzel());
+		d_zug.setBool("figurBewegtIstWeiss",figurBewegt.istWeiss());
+		if (figurGeschlagen!=null) d_zug.setString("figurGeschlagen",figurGeschlagen.getKuerzel());
 		d_zug.setString("feldStart",sFeldStart);
 		d_zug.setString("feldZiel",sFeldZiel);
 		d_zug.setString("zeitstempel",""+System.currentTimeMillis());
 		zugHistorie.add(d_zug);
-		weissAmZug=!weissAmZug;
+		d_Spiel.invertBool("weissAmZug");
+
+		System.out.println(d_Spiel);
+	}
+
+	// bin ich selbst im Schach, wenn ich mich von dieser Position auf die neue Position bewege?
+	public boolean binIchImSchachDurchZug(String sFeldStart,String sFeldZiel){
+		Figur ziehendeFigur=getBrett().getFeld(sFeldStart).getFigur();
+		Figur geschlageneFigur=zieheTestweise(ziehendeFigur,sFeldStart,sFeldZiel);
+		boolean schach=binIchImSchach(ziehendeFigur,ziehendeFigur.istWeiss());
+		zieheTestweiseZurueck(ziehendeFigur,geschlageneFigur,sFeldStart,sFeldZiel);
+		return schach;
+	}
+
+	public boolean istFeldBedroht(String sFeld,boolean durchWeiss,boolean rochadenCheck){
+		ArrayList<String> schlagbareFelder=getSchlagbareFelder(durchWeiss,rochadenCheck);
+		return schlagbareFelder.contains(sFeld);
 	}
 
 	private Figur zieheTestweise(Figur ziehendeFigur,String sFeldStart,String sFeldZiel){
@@ -274,33 +357,24 @@ public class Spiel {
 		zieheTestweise(ziehendeFigur,sFeldZiel,sFeldStart);
 		if (geschlageneFigur!=null) geschlageneFigur.setFeld(getBrett().getFeld(sFeldZiel));
 	}
-
-	// bin ich selbst im Schach, wenn ich mich von dieser Position auf die neue Position bewege?
-	public boolean binIchImSchachDurchZug(String sFeldStart,String sFeldZiel){
-		Figur ziehendeFigur=getBrett().getFeld(sFeldStart).getFigur();
-		Figur geschlageneFigur=zieheTestweise(ziehendeFigur,sFeldStart,sFeldZiel);
-		boolean schach=binIchImSchach(ziehendeFigur.istWeiss());
-		zieheTestweiseZurueck(ziehendeFigur,geschlageneFigur,sFeldStart,sFeldZiel);
-		return schach;
-	}
-
-	public boolean binIchImSchach(boolean binWeiss){
+	private boolean binIchImSchach(Figur ziehendeFigur,boolean binWeiss){
 		String feldMeinKoenig=getKoenig(binWeiss).getFeld().getKuerzel();
-		ArrayList<String> schlagbareFelder=getSchlagbareFelder(!binWeiss,false);
+		ArrayList<String> schlagbareFelder=getSchlagbareFelder(!binWeiss,false);	
 		if (schlagbareFelder==null) return false;
 		return (schlagbareFelder.contains(feldMeinKoenig));
 	}
-	
-	public ArrayList<String> getSchlagbareFelder(boolean vonWeiss,boolean eigeneBewegungImGange){
+
+	public ArrayList<String> getSchlagbareFelder(boolean vonWeiss,boolean rochadenCheck){
 		ArrayList<String> erg=new ArrayList<String>();
 		for (Figur f:figuren){
 			if ((f.istWeiss()==vonWeiss)&&(!f.istGeschlagen())){
-				ArrayList<String> erlaubt=f.getErlaubteZuege(eigeneBewegungImGange);
+				if (rochadenCheck && (f instanceof Koenig)) continue;
+				ArrayList<String> erlaubt=f.getErlaubteZuege();
 				if (erlaubt==null) return null;
 				for (String feld:erlaubt){
 					if (!erg.contains(feld)) erg.add(feld);					
 				}
-			}
+			}				
 		}
 		return erg;
 	}
@@ -331,9 +405,6 @@ public class Spiel {
 	}
 
 	public D_Spiel toD(){
-		D_Spiel d_Spiel=new D_Spiel();
-		d_Spiel.setBool("weissAmZug",weissAmZug());
-		d_Spiel.setInt("zugZaehler",zugZaehler);
 		return d_Spiel;
 	}
 	

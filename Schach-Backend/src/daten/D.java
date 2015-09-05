@@ -46,8 +46,29 @@ public class D{
 	public void setInt(String name,int wert){
 		p.setProperty(name,""+wert);
 	}
+	public void incInt(String name){
+		if (!existKey(name))
+			throw new RuntimeException("Daten incInt: Attribut existiert nicht!");
+		int wert=Integer.parseInt(p.getProperty(name));
+		wert++;
+		p.setProperty(name,""+wert);
+	}
+	public void decInt(String name){
+		if (!existKey(name))
+			throw new RuntimeException("Daten decInt: Attribut existiert nicht!");
+		int wert=Integer.parseInt(p.getProperty(name));
+		wert--;
+		p.setProperty(name,""+wert);
+	}
+
 	public void setBool(String name,boolean wert){
 		p.setProperty(name,""+wert);
+	}
+	public void invertBool(String name){
+		if (!existKey(name))
+			throw new RuntimeException("Daten invertBool: Attribut existiert nicht!");
+		boolean wert=getBool(name);
+		p.setProperty(name,""+(!wert));
 	}
 	public void setDecimal(String name,String wert){
 		if (wert==null) wert="0.0";

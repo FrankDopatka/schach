@@ -15,9 +15,10 @@ public class Bauer extends Figur {
 	}
 
 	@Override
-	public ArrayList<String> getErlaubteZuege(boolean eigeneBewegungImGange){
+	public ArrayList<String> getErlaubteZuege(){
 		ArrayList<String> felder=new ArrayList<String>();
 		if (istGeschlagen()) return felder;
+		if (getSpiel().weissSchachMatt()||getSpiel().schwarzSchachMatt()) return felder;
 		Feld feldStart=getFeld();
 		Feld feldDazwischen=null;
 		Feld feldZiel=null;
@@ -75,8 +76,6 @@ public class Bauer extends Figur {
 				if ((feldZiel!=null)&&(feldZiel.hatGegnerischeFigur(this))) felder.add(Brett.toKuerzel(x+1,y-1));
 			}
 		}
-		// komme ich durch die Bewegung selbst ins Schach? -> Bewegung wieder entfernen!
-		if (eigeneBewegungImGange) removeZuegeSelbstImSchach(felder,this);
 		return felder;
 	}
 }

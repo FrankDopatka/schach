@@ -17,14 +17,12 @@ public class Brett {
 		return toZeichen(x)+y;
 	}
 	
-	/*
 	public static int[] fromKuerzel(String kuerzel){ //x,y
 		int[] ergebnis=new int[2];
 		ergebnis[0]=((int)kuerzel.toCharArray()[0])-96;
 		ergebnis[1]=Integer.parseInt(""+kuerzel.toCharArray()[1]);
 		return ergebnis;
 	}
-	*/
 	
 	public Brett(){
 		boolean setzeWeiss=false;

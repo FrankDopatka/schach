@@ -28,6 +28,12 @@ public class Updater extends Thread{
 						frontend.setBrett(backendSpiel.getBildWeiss());
 					else
 						frontend.setBrett(backendSpiel.getBildSchwarz());
+					
+					if (d_spiel.getBool("weissImSchach")) System.out.println("SCHACH WEISS!");
+					if (d_spiel.getBool("schwarzImSchach")) System.out.println("SCHACH SCHWARZ!");
+					if (d_spiel.getBool("weissSchachMatt")) System.out.println("SCHACHMATT WEISS!");
+					if (d_spiel.getBool("schwarzSchachMatt")) System.out.println("SCHACHMATT SCHWARZ!");
+					
 					frontend.setZugZaehler(zaehlerServer);
 				}
 				Thread.sleep(timer*1000);

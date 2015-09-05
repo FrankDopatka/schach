@@ -2,6 +2,7 @@ package frontend;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -16,6 +17,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import backend.BackendSpielAdminStub;
 import backend.BackendSpielStub;
@@ -36,11 +39,13 @@ public class Frontend extends JFrame{
 
 	private JLabel brett=new JLabel();
 	private BufferedImage brettBild=null;
+	
 	private JPanel center=new JPanel();
 	private JPanel west=new JPanel();
-	private JPanel ost=new JPanel();
-	private JPanel nord=new JPanel();
 	private JPanel sued=new JPanel();
+	
+	private JTextArea jLog=new JTextArea();
+	private JScrollPane jTextScroller;
 	
 	private EventHandler events=null;
 	private BackendSpielStub backendSpiel=null;
@@ -92,20 +97,21 @@ public class Frontend extends JFrame{
 		brett.setOpaque(false);
 		brett.setSize(445,540);
 		center.add(brett);
+		
+		jLog.setLineWrap(true);
+		jTextScroller=new JScrollPane(jLog,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		jTextScroller.setPreferredSize(new Dimension(200,400));
+		add(jTextScroller,BorderLayout.EAST);
 
 		sued.add(new JButton("HALLO?"));
-		west.add(new JButton("HALLO?"));
-		ost.add(new JButton("HALLO?"));
-
-		panelHaupt.add(nord,BorderLayout.NORTH);
+		
 		panelHaupt.add(sued,BorderLayout.SOUTH);
 		panelHaupt.add(west,BorderLayout.WEST);
-		panelHaupt.add(ost,BorderLayout.EAST);
 		panelHaupt.add(center,BorderLayout.CENTER);
 		
 		add(panelMenu,BorderLayout.NORTH);
 		add(panelHaupt,BorderLayout.CENTER);
-		setSize(650,750);
+		setSize(700,650);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
@@ -145,21 +151,22 @@ public class Frontend extends JFrame{
 	public boolean ichSpieleWeiss(){
 		return binWeiss;
 	}
-	/*
-	public void neuesSpiel(){
-		spiel=new Spiel();
+	
+	public boolean ichBinAmZug(){
+		return(ichSpieleWeiss()==(getZugZaehler()%2==0));
 	}
 	
-	public void ladenSpiel(String pfad){
-		spiel=new Spiel(pfad);
-		setBrett(spiel.getBild());
+	public int getZugZaehler() {
+		return zugZaehler;
 	}
-*/
+
+	public void setZugZaehler(int zugZaehler) {
+		this.zugZaehler = zugZaehler;
+	}
 
 	public void markiereFelder(int x,int y,ArrayList<String> felderErlaubt){
 		markiereFelder(toKuerzel(x,y),felderErlaubt);
 	}
-
 	public void markiereFelder(String feldMarkiert,ArrayList<String> felderErlaubt){
 		int xFeld=fromKuerzel(feldMarkiert)[0];
 		int yFeld=fromKuerzel(feldMarkiert)[1];
@@ -170,6 +177,7 @@ public class Frontend extends JFrame{
 		g.setStroke(new BasicStroke(3));
 		if ((felderErlaubt!=null)&&(felderErlaubt.size()>0)){
 			for(String feld:felderErlaubt){
+				if (feld==null) continue;
 				int xFeldErlaubt=fromKuerzel(feld)[0];
 				int yFeldErlaubt=fromKuerzel(feld)[1];
 				viereck=getFeldStart(xFeldErlaubt,yFeldErlaubt);
@@ -206,13 +214,4 @@ public class Frontend extends JFrame{
 		mVerwaltung.add(mVerwaltungInfo); mVerwaltungInfo.addActionListener(events);
 		menu.add(mVerwaltung);
 	}
-
-	public int getZugZaehler() {
-		return zugZaehler;
-	}
-
-	public void setZugZaehler(int zugZaehler) {
-		this.zugZaehler = zugZaehler;
-	}
-
 }

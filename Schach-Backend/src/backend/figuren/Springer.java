@@ -14,9 +14,10 @@ public class Springer extends Figur {
 	}
 
 	@Override
-	public ArrayList<String> getErlaubteZuege(boolean eigeneBewegungImGange){
+	public ArrayList<String> getErlaubteZuege(){
 		ArrayList<String> felder=new ArrayList<String>();
 		if (istGeschlagen()) return felder;
+		if (getSpiel().weissSchachMatt()||getSpiel().schwarzSchachMatt()) return felder;
 		Feld feldStart=getFeld();
 		int x=feldStart.getPosX();
 		int y=feldStart.getPosY();
@@ -28,8 +29,6 @@ public class Springer extends Figur {
 		addZug(felder,x-1,y-2);		
 		addZug(felder,x-2,y+1);		
 		addZug(felder,x-2,y-1);		
-		// komme ich durch die Bewegung selbst ins Schach? -> Bewegung wieder entfernen!
-		if (eigeneBewegungImGange) removeZuegeSelbstImSchach(felder,this);
 		return felder;
 	}
 }

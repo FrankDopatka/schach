@@ -65,12 +65,12 @@ public abstract class Figur {
 		this.istWeiss=istWeiss;
 	}
 	
-	public ArrayList<String> getErlaubteZuege(boolean eigeneBewegungImGange){
+	public ArrayList<String> getErlaubteZuege(){
 		return new ArrayList<String>();
 	}
 	
 	public boolean istZugErlaubt(String ziel){
-		ArrayList<String> erlaubt=getErlaubteZuege(false);
+		ArrayList<String> erlaubt=getErlaubteZuege();
 		if (ziel==null) return false;
 		if ((erlaubt==null)||(erlaubt.size()==0)) return false;
 		for(String s:erlaubt){
@@ -79,7 +79,11 @@ public abstract class Figur {
 		return false;
 	}
 	
-	
+
+	protected boolean addZug(ArrayList<String> felder,String kuerzel){
+		return addZug(felder,Brett.fromKuerzel(kuerzel)[0],Brett.fromKuerzel(kuerzel)[1]);
+	}
+
 	// =false: auf dieser Linie keine weiteren Zuege mehr erlaubt
 	protected boolean addZug(ArrayList<String> felder,int x,int y){
 		if ((x<1)||(x>8)||(y<1)||(y>8)) return false;
@@ -97,8 +101,8 @@ public abstract class Figur {
 	}
 	
 	// die Zuege aus der Liste entfernen, durch die ich selbst im Schach waere
-	protected void removeZuegeSelbstImSchach(ArrayList<String> felderZiel,Figur meineFigur){
-		String posIch=meineFigur.getFeld().getKuerzel();
+	public void removeZuegeSelbstImSchach(ArrayList<String> felderZiel,Figur figur){
+		String posIch=figur.getFeld().getKuerzel();
 		ArrayList<String> felderZuEntfernen=new ArrayList<String>();
 		for(String zugZiel:felderZiel){
 			if (getSpiel().binIchImSchachDurchZug(posIch,zugZiel)) felderZuEntfernen.add(zugZiel);
