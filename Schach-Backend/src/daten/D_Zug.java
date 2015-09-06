@@ -9,7 +9,6 @@ public class D_Zug extends D{
 		addString("feldStart","");
 		addString("feldZiel","");
 		addString("zeitstempel","");
-		addString("bemerkung1","");
 		addString("bemerkungSpielzug","");
 		addString("bemerkungSchach","");
 	}

@@ -2,6 +2,8 @@ package backend.figuren;
 
 import java.util.ArrayList;
 
+import daten.D_Zug;
+import daten.D_Zug_Bemerkung;
 import backend.spiel.Brett;
 import backend.spiel.Feld;
 import backend.spiel.Spiel;
@@ -49,6 +51,15 @@ public class Bauer extends Figur {
 				feldZiel=getSpiel().getBrett().getFeld(x+1,y+1);
 				if ((feldZiel!=null)&&(feldZiel.hatGegnerischeFigur(this))) felder.add(Brett.toKuerzel(x+1,y+1));				
 			}
+			// en passant moeglich?
+			D_Zug letzterZug=getSpiel().getLetzterZug();
+			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
+				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
+				if (koordinatenAlt[0]==x-1)
+					felder.add(Brett.toKuerzel(x-1,y+1));
+				else if (koordinatenAlt[0]==x+1)
+					felder.add(Brett.toKuerzel(x+1,y+1));
+			}
 		}
 		else{
 			// Bewegung nach unten (schwarz)...
@@ -74,6 +85,15 @@ public class Bauer extends Figur {
 			if (x<8){
 				feldZiel=getSpiel().getBrett().getFeld(x+1,y-1);
 				if ((feldZiel!=null)&&(feldZiel.hatGegnerischeFigur(this))) felder.add(Brett.toKuerzel(x+1,y-1));
+			}
+			// en passant moeglich?
+			D_Zug letzterZug=getSpiel().getLetzterZug();
+			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
+				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
+				if (koordinatenAlt[0]==x-1)
+					felder.add(Brett.toKuerzel(x-1,y-1));
+				else if (koordinatenAlt[0]==x+1)
+					felder.add(Brett.toKuerzel(x+1,y-1));
 			}
 		}
 		return felder;

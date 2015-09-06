@@ -232,6 +232,14 @@ public class Spiel {
 		return schwarzSchachMatt();
 	}
 	
+	public ArrayList<D_Zug> getZugHistorie(){
+		return zugHistorie;
+	}
+	
+	public D_Zug getLetzterZug(){
+		if ((zugHistorie==null)||(zugHistorie.size()==0)) return null;
+		return (zugHistorie.get(zugHistorie.size()-1));
+	}
 
 	public void ziehe(String sFeldStart,String sFeldZiel){
 		Feld feldStart=getBrett().getFeld(sFeldStart);
@@ -250,18 +258,35 @@ public class Spiel {
 		if (binIchImSchachDurchZug(sFeldStart,sFeldZiel))
 			throw new RuntimeException("Der Zug von "+figurStart.getKuerzel()+sFeldStart+" nach "+sFeldZiel+" ist verboten, da Sie dadurch im Schach stehen wuerden!");		
 		// alles OK, Zug durchfuehren...
-		if (figurZiel!=null){
-			// eine Figur auf dem Zielfeld wird geschlagen
+		int[] koordinatenAlt=Brett.fromKuerzel(sFeldStart); // 0:x, 1:y
+		int[] koordinatenNeu=Brett.fromKuerzel(sFeldZiel); // 0:x, 1:y
+
+		if (figurZiel!=null){ // eine Figur auf dem Zielfeld wird geschlagen
 			figurZiel.setFeld(null);
+		}
+		// en passant
+		boolean istEnPassant=false;
+		D_Zug letzterZug=getLetzterZug();
+		if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
+			if ((figurZiel==null)&&(koordinatenAlt[0]!=koordinatenNeu[0])){
+				Figur bauerZuSchlagen=getBrett().getFeld(letzterZug.getString("feldZiel")).getFigur();
+				bauerZuSchlagen.setFeld(null);
+				istEnPassant=true;
+			}
+		}
+		// Bauer Doppelschritt
+		boolean istBauerDoppelschritt=false;
+		if (figurStart instanceof Bauer){
+			if ((koordinatenAlt[1]==koordinatenNeu[1]+2)||(koordinatenAlt[1]==koordinatenNeu[1]-2)){
+				istBauerDoppelschritt=true;
+			}
 		}
 		// Rochade
 		boolean istRochade=false;
 		if (figurStart instanceof Koenig){
-			int[] koordinatenAlt=Brett.fromKuerzel(sFeldStart);
-			int[] koordinatenNeu=Brett.fromKuerzel(sFeldZiel);
 			if ((koordinatenAlt[0]==koordinatenNeu[0]+2)||(koordinatenAlt[0]==koordinatenNeu[0]-2)){
 				istRochade=true;
-				// passender Turm Ziehen
+				// passender Turm noch ziehen
 				Figur turm=null;
 				if (sFeldZiel.equals("c1")){
 					turm=getBrett().getFeld("a1").getFigur();
@@ -276,21 +301,30 @@ public class Spiel {
 					turm=getBrett().getFeld("h8").getFigur();				
 					turm.setFeld(getBrett().getFeld("f8"));					
 				}
-				
 				turm.bereitsBewegt();
 			}
 		}
-		
+		// ZUG DURCHFUEHREN
 		figurStart.setFeld(feldZiel);
 		figurStart.wurdeBewegt();
-		gezogen(figurStart,figurZiel,sFeldStart,sFeldZiel,istRochade);
+		gezogen(figurStart,figurZiel,sFeldStart,sFeldZiel,istRochade,istBauerDoppelschritt,istEnPassant);
 	}
 	
-	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,boolean istRochade) {
+	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,
+			boolean istRochade,boolean istBauerDoppelschritt,boolean istEnPassant) {
 		D_Zug d_zug=new D_Zug();
 
 		// SCHACH
 		if (binIchImSchach(figurBewegt,!figurBewegt.istWeiss())){
+			
+			
+			
+			System.out.println("SCHACH? Schlagbar:"+getSchlagbareFelder(!figurBewegt.istWeiss(),false));
+			ArrayList<String> schlagbar=getSchlagbareFelder(!figurBewegt.istWeiss(),false);
+			
+			
+			
+			
 			if (getSchlagbareFelder(!figurBewegt.istWeiss(),false).size()==0){
 				if (!figurBewegt.istWeiss()){
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
@@ -312,8 +346,10 @@ public class Spiel {
 			}
 		}
 		
-		// ROCHADE
+		// SPEZIALZUEGE: BAUER DOPPELSCHRITT, ROCHADE, EN PASSANT
+		if (istBauerDoppelschritt) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerDoppelschritt);		
 		if (istRochade) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.Rochade);
+		if (istEnPassant) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.EnPassant);
 		
 		// ZUGZAEHLER
 		d_Spiel.incInt("zugZaehler");
