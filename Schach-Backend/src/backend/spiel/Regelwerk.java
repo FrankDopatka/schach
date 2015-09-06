@@ -4,14 +4,7 @@ import java.util.ArrayList;
 
 import daten.D_Zug;
 import daten.D_Zug_Bemerkung;
-import backend.figuren.Bauer;
-import backend.figuren.Dame;
-import backend.figuren.Figur;
-import backend.figuren.FigurEnum;
-import backend.figuren.Koenig;
-import backend.figuren.Laeufer;
-import backend.figuren.Springer;
-import backend.figuren.Turm;
+import backend.figuren.*;
 
 public class Regelwerk {
 	private Spiel spiel;
@@ -69,6 +62,10 @@ public class Regelwerk {
 	}
 
 	public void ziehe(String sFeldStart,String sFeldZiel){
+		// Reset von Altdaten
+		spiel.toD().setBool("weissImSchach",false);					
+		spiel.toD().setBool("schwarzImSchach",false);
+		
 		Feld feldStart=brett.getFeld(sFeldStart);
 		if (feldStart==null) throw new RuntimeException("Das Feld "+sFeldStart+" ist ungueltig!");
 		Feld feldZiel=brett.getFeld(sFeldZiel);
@@ -172,9 +169,6 @@ public class Regelwerk {
 				if (erlaubt!=null){
 					for (String feld:erlaubt){
 						if ((!erlaubteZuege.contains(feld))&&(!binIchImSchachDurchZug(f.getFeld().getKuerzel(),feld))){
-							System.out.println(f);
-							System.out.println(f.getFeld().getKuerzel());
-							System.out.println(feld);
 							erlaubteZuege.add(feld);					
 						}
 					}						
@@ -197,7 +191,7 @@ public class Regelwerk {
 				}
 				else{
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzImSchach);
-					spiel.toD().setBool("schwarzImSchach",true);					
+					spiel.toD().setBool("schwarzImSchach",true);
 				}
 			}
 		}
