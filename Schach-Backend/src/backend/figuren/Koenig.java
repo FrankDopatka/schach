@@ -41,7 +41,7 @@ public class Koenig extends Figur {
 						// Rochade zwischen a1 und e1
 						if ((brett.getFeld("b1").getFigur()==null)&&(brett.getFeld("c1").getFigur()==null)&&(brett.getFeld("d1").getFigur()==null)){
 							// König über kein Feld ziehen muss, das durch eine feindliche Figur bedroht wird:
-							if ((!getSpiel().istFeldBedroht("c1",!istWeiss(),true))&&(!getSpiel().istFeldBedroht("d1",!istWeiss(),true)))
+							if ((!istFeldBedroht("c1",!istWeiss(),true))&&(!istFeldBedroht("d1",!istWeiss(),true)))
 								addZug(felder,"c1"); // Koenig landet dann auf c1
 						}
 					}
@@ -49,7 +49,7 @@ public class Koenig extends Figur {
 						// Rochade zwischen a8 und e8
 						if ((brett.getFeld("b8").getFigur()==null)&&(brett.getFeld("c8").getFigur()==null)&&(brett.getFeld("d8").getFigur()==null)){
 							// König über kein Feld ziehen muss, das durch eine feindliche Figur bedroht wird:
-							if ((!getSpiel().istFeldBedroht("c8",!istWeiss(),true))&&(!getSpiel().istFeldBedroht("d8",!istWeiss(),true)))
+							if ((!istFeldBedroht("c8",!istWeiss(),true))&&(!istFeldBedroht("d8",!istWeiss(),true)))
 									addZug(felder,"c8"); // Koenig landet dann auf c8
 						}						
 					}
@@ -63,7 +63,7 @@ public class Koenig extends Figur {
 						// Rochade zwischen e1 und h1
 						if ((brett.getFeld("f1").getFigur()==null)&&(brett.getFeld("g1").getFigur()==null)){
 							// König über kein Feld ziehen muss, das durch eine feindliche Figur bedroht wird:
-							if ((!getSpiel().istFeldBedroht("f1",!istWeiss(),true))&&(!getSpiel().istFeldBedroht("g1",!istWeiss(),true)))
+							if ((!istFeldBedroht("f1",!istWeiss(),true))&&(!istFeldBedroht("g1",!istWeiss(),true)))
 								addZug(felder,"g1"); // Koenig landet dann auf g1
 						}						
 					}
@@ -71,7 +71,7 @@ public class Koenig extends Figur {
 						// Rochade zwischen e8 und h8
 						if ((brett.getFeld("f8").getFigur()==null)&&(brett.getFeld("g8").getFigur()==null)){
 							// König über kein Feld ziehen muss, das durch eine feindliche Figur bedroht wird:
-							if ((!getSpiel().istFeldBedroht("f8",!istWeiss(),true))&&(!getSpiel().istFeldBedroht("g8",!istWeiss(),true)))
+							if ((!istFeldBedroht("f8",!istWeiss(),true))&&(!istFeldBedroht("g8",!istWeiss(),true)))
 								addZug(felder,"g8"); // Koenig landet dann auf g8
 						}						
 					}
@@ -79,5 +79,10 @@ public class Koenig extends Figur {
 			}
 		}
 		return felder;
+	}
+	
+	private boolean istFeldBedroht(String sFeld,boolean durchWeiss,boolean rochadenCheck){
+		ArrayList<String> schlagbareFelder=getSpiel().getSchlagbareFelder(durchWeiss,true);
+		return schlagbareFelder.contains(sFeld);
 	}
 }

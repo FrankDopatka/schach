@@ -187,7 +187,15 @@ public class Spiel {
 		}
 		return ergebnis;
 	}
-	
+
+	public ArrayList<Figur> getFigurenAufFeld(boolean weiss){
+		ArrayList<Figur> erg=new ArrayList<Figur>();
+		for(Figur f:figuren){
+			if ((f.istWeiss()==weiss)&&(!f.istGeschlagen())) erg.add(f);
+		}
+		return erg;
+	}
+
 	private Image getBildGeschlagen(boolean weiss){
 		int groesse=Parameter.groesseFeld;
 		Image im=new BufferedImage(groesse*8,groesse/2+4,BufferedImage.TYPE_INT_ARGB);
@@ -260,7 +268,6 @@ public class Spiel {
 		// alles OK, Zug durchfuehren...
 		int[] koordinatenAlt=Brett.fromKuerzel(sFeldStart); // 0:x, 1:y
 		int[] koordinatenNeu=Brett.fromKuerzel(sFeldZiel); // 0:x, 1:y
-
 		if (figurZiel!=null){ // eine Figur auf dem Zielfeld wird geschlagen
 			figurZiel.setFeld(null);
 		}
@@ -310,29 +317,48 @@ public class Spiel {
 		gezogen(figurStart,figurZiel,sFeldStart,sFeldZiel,istRochade,istBauerDoppelschritt,istEnPassant);
 	}
 	
+	public ArrayList<String> getSchlagbareFelder(boolean vonWeiss,boolean rochadenCheck){
+		ArrayList<String> erg=new ArrayList<String>();
+		for (Figur f:figuren){
+			if ((f.istWeiss()==vonWeiss)&&(!f.istGeschlagen())){
+				if (rochadenCheck && (f instanceof Koenig)) continue;
+				ArrayList<String> erlaubt=f.getErlaubteZuege();
+				if (erlaubt==null) return null;
+				for (String feld:erlaubt){
+					if (!erg.contains(feld)) erg.add(feld);					
+				}
+			}				
+		}
+		return erg;
+	}
+	
 	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,
 			boolean istRochade,boolean istBauerDoppelschritt,boolean istEnPassant) {
 		D_Zug d_zug=new D_Zug();
 
-		// SCHACH
+		// SCHACH UND SCHACHMATT
 		if (binIchImSchach(figurBewegt,!figurBewegt.istWeiss())){
-			
-			
-			
-			System.out.println("SCHACH? Schlagbar:"+getSchlagbareFelder(!figurBewegt.istWeiss(),false));
 			ArrayList<String> schlagbar=getSchlagbareFelder(!figurBewegt.istWeiss(),false);
-			
-			
-			
-			
-			if (getSchlagbareFelder(!figurBewegt.istWeiss(),false).size()==0){
+			ArrayList<String> zuEntfernen=new ArrayList<String>();
+			if ((schlagbar!=null)&&(schlagbar.size()>0)){
+				for (String zug:schlagbar){
+					System.out.println("sFeldZiel:"+sFeldZiel);
+					System.out.println("zug:"+zug);
+					for(Figur f:getFigurenAufFeld(!figurBewegt.istWeiss())){
+						if (binIchImSchachDurchZug(f.getFeld().getKuerzel(),zug)) zuEntfernen.add(zug);						
+					}
+				}
+			}
+			schlagbar.removeAll(zuEntfernen);
+			if (schlagbar.size()==0){
 				if (!figurBewegt.istWeiss()){
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
 					d_Spiel.setBool("weissSchachMatt",true);					
 				}
-				else
+				else{
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzSchachMatt);
-					d_Spiel.setBool("schwarzSchachMatt",true);
+					d_Spiel.setBool("schwarzSchachMatt",true);					
+				}
 			}
 			else{
 				if (!figurBewegt.istWeiss()){
@@ -376,12 +402,6 @@ public class Spiel {
 		zieheTestweiseZurueck(ziehendeFigur,geschlageneFigur,sFeldStart,sFeldZiel);
 		return schach;
 	}
-
-	public boolean istFeldBedroht(String sFeld,boolean durchWeiss,boolean rochadenCheck){
-		ArrayList<String> schlagbareFelder=getSchlagbareFelder(durchWeiss,rochadenCheck);
-		return schlagbareFelder.contains(sFeld);
-	}
-
 	private Figur zieheTestweise(Figur ziehendeFigur,String sFeldStart,String sFeldZiel){
 		Feld feldZiel=getBrett().getFeld(sFeldZiel);
 		Figur figurGeschlagen=feldZiel.getFigur();		
@@ -398,21 +418,6 @@ public class Spiel {
 		ArrayList<String> schlagbareFelder=getSchlagbareFelder(!binWeiss,false);	
 		if (schlagbareFelder==null) return false;
 		return (schlagbareFelder.contains(feldMeinKoenig));
-	}
-
-	public ArrayList<String> getSchlagbareFelder(boolean vonWeiss,boolean rochadenCheck){
-		ArrayList<String> erg=new ArrayList<String>();
-		for (Figur f:figuren){
-			if ((f.istWeiss()==vonWeiss)&&(!f.istGeschlagen())){
-				if (rochadenCheck && (f instanceof Koenig)) continue;
-				ArrayList<String> erlaubt=f.getErlaubteZuege();
-				if (erlaubt==null) return null;
-				for (String feld:erlaubt){
-					if (!erg.contains(feld)) erg.add(feld);					
-				}
-			}				
-		}
-		return erg;
 	}
 
 	public Figur getKoenig(boolean vonWeiss){
