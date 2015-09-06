@@ -82,7 +82,7 @@ public class Koenig extends Figur {
 	}
 	
 	private boolean istFeldBedroht(String sFeld,boolean durchWeiss,boolean rochadenCheck){
-		ArrayList<String> schlagbareFelder=getSpiel().getSchlagbareFelder(durchWeiss,true);
+		ArrayList<String> schlagbareFelder=getSpiel().getRegelwerk().getSchlagbareFelder(durchWeiss,true);
 		return schlagbareFelder.contains(sFeld);
 	}
 }

@@ -127,7 +127,7 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 			@PathParam("feldVon") String feldVon,
 			@PathParam("feldNach") String feldNach){
 		try{
-			spiel.ziehe(feldVon,feldNach);
+			spiel.getRegelwerk().ziehe(feldVon,feldNach);
 			return Xml.verpacken((new D_OK().toXml()));
 		} catch (Exception e) {
 			e.printStackTrace();

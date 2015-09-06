@@ -26,7 +26,7 @@ public class BackendSpielAdmin extends ResourceConfig implements iBackendSpielAd
 	public String neuesSpiel(){
 		try {
 			Spiel spiel=new Spiel();
-			spiel.setzeStartbelegung();
+			spiel.getRegelwerk().setzeStartbelegung();
 			BackendSpiel.setSpiel(spiel);
 			return Xml.verpacken(Xml.fromD(new D_OK()));
 		} catch (Exception e) {

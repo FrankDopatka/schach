@@ -105,7 +105,7 @@ public abstract class Figur {
 		String posIch=figur.getFeld().getKuerzel();
 		ArrayList<String> felderZuEntfernen=new ArrayList<String>();
 		for(String zugZiel:felderZiel){
-			if (getSpiel().binIchImSchachDurchZug(posIch,zugZiel)) felderZuEntfernen.add(zugZiel);
+			if (getSpiel().getRegelwerk().binIchImSchachDurchZug(posIch,zugZiel)) felderZuEntfernen.add(zugZiel);
 		}
 		felderZiel.removeAll(felderZuEntfernen);
 	}
