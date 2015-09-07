@@ -26,6 +26,7 @@ public class Bauer extends Figur {
 		Feld feldZiel=null;
 		int x=feldStart.getPosX();
 		int y=feldStart.getPosY();
+		if ((y==1)||(y==8)) return felder; // Bauer am Ende angekommen
 		if (istWeiss()){ // Weiss spielt immer nach oben
 			// Bewegung nach oben...
 			// 1 Schritt

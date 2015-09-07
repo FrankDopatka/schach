@@ -7,4 +7,5 @@ public interface iBackendSpiel {
 	String getErlaubteZuege(String feld);
 	String ziehe(String feldVon,String feldNach);
 	String getSpielDaten();
+	String bauerUmwandlung(String zuFigur);
 }

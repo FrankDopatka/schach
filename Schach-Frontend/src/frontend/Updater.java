@@ -7,6 +7,7 @@ public class Updater extends Thread{
 	private Frontend frontend;
 	private BackendSpielStub backendSpiel;
 	private int timer;
+	private boolean bauernUmwandlungImGange=false;
 	
 	public Updater(Frontend frontend,int timer){
 		this.frontend=frontend;
@@ -22,23 +23,34 @@ public class Updater extends Thread{
 				D_Spiel d_spiel=(D_Spiel)Xml.toD(backendSpiel.getSpielDaten());
 				int zaehlerServer=d_spiel.getInt("zugZaehler");
 				int zaehlerClient=frontend.getZugZaehler();
+				String bemerkungSpielzug=d_spiel.getString("bemerkungSpielzug");
+				String bemerkungSchach=d_spiel.getString("bemerkungSchach");
 				if (zaehlerClient!=zaehlerServer){
-					// komplettes Update noetig
-					if (frontend.ichSpieleWeiss())
-						frontend.setBrett(backendSpiel.getBildWeiss());
-					else
-						frontend.setBrett(backendSpiel.getBildSchwarz());
-					
-					if (d_spiel.getBool("weissImSchach")) System.out.println("SCHACH WEISS!");
-					if (d_spiel.getBool("schwarzImSchach")) System.out.println("SCHACH SCHWARZ!");
-					if (d_spiel.getBool("weissSchachMatt")) System.out.println("SCHACHMATT WEISS!");
-					if (d_spiel.getBool("schwarzSchachMatt")) System.out.println("SCHACHMATT SCHWARZ!");
-					
-					frontend.setZugZaehler(zaehlerServer);
+					update(bemerkungSchach,bemerkungSpielzug,zaehlerServer);					
+				}
+				else if (bemerkungSpielzug.equals(""+D_Zug_Bemerkung.BauerUmwandlungImGange)&&(!bauernUmwandlungImGange)){
+					if (frontend.ichSpieleWeiss()==d_spiel.getBool("weissAmZug")) frontend.setBauerUmwandelnImGange();	
+					bauernUmwandlungImGange=true;
+				}
+				else if ((bauernUmwandlungImGange)&&(bemerkungSpielzug.equals(""+D_Zug_Bemerkung.BauerUmwandlung))){
+					update(bemerkungSchach,bemerkungSpielzug,zaehlerServer);
+					bauernUmwandlungImGange=false;
 				}
 				Thread.sleep(timer*1000);
 			}
 			catch (Exception e){}
 		}
+	}
+	
+	public void update(String bemerkungSchach,String bemerkungSpielzug,int zaehlerServer){
+		if (frontend.ichSpieleWeiss())
+			frontend.setBrett(backendSpiel.getBildWeiss());
+		else
+			frontend.setBrett(backendSpiel.getBildSchwarz());
+		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.WeissImSchach)) System.out.println("SCHACH WEISS!");
+		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.SchwarzImSchach)) System.out.println("SCHACH SCHWARZ!");
+		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.WeissSchachMatt)) System.out.println("SCHACHMATT WEISS!");
+		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.SchwarzSchachMatt)) System.out.println("SCHACHMATT SCHWARZ!");
+		frontend.setZugZaehler(zaehlerServer);
 	}
 }

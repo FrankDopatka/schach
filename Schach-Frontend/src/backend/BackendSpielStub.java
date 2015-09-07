@@ -86,4 +86,9 @@ public class BackendSpielStub implements iBackendSpiel{
 	public String getSpielDaten() {
 		return getXmlvonRest("getSpielDaten");
 	}
+	
+	@Override
+	public String bauerUmwandlung(String zuFigur) {
+		return getXmlvonRest("bauerUmwandlung"+"/"+zuFigur);
+	}
 }

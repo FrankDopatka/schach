@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import daten.D_Zug;
 import daten.D_Zug_Bemerkung;
+import daten.FigurEnum;
 import backend.figuren.*;
 
 public class Regelwerk {
@@ -61,6 +62,42 @@ public class Regelwerk {
 		return ergebnis;
 	}
 
+	
+	public void bauernUmwandlung(String zuFigur){
+		D_Zug zug=spiel.getLetzterZug();
+		if (zug==null) 
+			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
+		if (!zug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerUmwandlungImGange))
+			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
+
+		Figur figur=null;
+		switch (zuFigur){
+		case "Dame":
+			figur=new Dame(spiel,zug.getBool("figurBewegtIstWeiss"));
+			break;
+		case "Turm":
+			figur=new Turm(spiel,zug.getBool("figurBewegtIstWeiss"));
+			break;
+		case "Laeufer":
+			figur=new Laeufer(spiel,zug.getBool("figurBewegtIstWeiss"));
+			break;
+		case "Springer":
+			figur=new Springer(spiel,zug.getBool("figurBewegtIstWeiss"));
+			break;
+		}
+		Feld feld=brett.getFeld(zug.getString("feldZiel"));
+		// alten Bauer entfernen
+		Figur bauerAlt=feld.getFigur();
+		bauerAlt.setFeld(null);
+		figuren.remove(bauerAlt);
+		
+		//neue Figur setzen
+		figur.setFeld(feld);
+		zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
+		figuren.add(figur);
+		gezogen(figur,figur,zug.getString("feldZiel"),zug.getString("feldZiel"),false,false,false,false,true);
+	}
+	
 	public void ziehe(String sFeldStart,String sFeldZiel){
 		// Reset von Altdaten
 		spiel.toD().setString("bemerkungSpielzug","");
@@ -127,10 +164,19 @@ public class Regelwerk {
 				turm.bereitsBewegt();
 			}
 		}
-		// ZUG DURCHFUEHREN
+		// Figur bewegen
 		figurStart.setFeld(feldZiel);
 		figurStart.wurdeBewegt();
-		gezogen(figurStart,figurZiel,sFeldStart,sFeldZiel,istRochade,istBauerDoppelschritt,istEnPassant);
+
+		// Bauernumwandlung?
+		boolean bauernUmwandlungImGange=false;
+		if (figurStart instanceof Bauer){
+			if ((Brett.fromKuerzel(sFeldZiel)[1]==1)||(Brett.fromKuerzel(sFeldZiel)[1]==8)){
+				bauernUmwandlungImGange=true;
+			}
+		}
+		// Zug verwalten
+		gezogen(figurStart,figurZiel,sFeldStart,sFeldZiel,istRochade,istBauerDoppelschritt,istEnPassant,bauernUmwandlungImGange,false);
 	}
 	
 	public ArrayList<String> getSchlagbareFelder(boolean vonWeiss,boolean rochadenCheck){
@@ -149,18 +195,25 @@ public class Regelwerk {
 	}
 	
 	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,
-			boolean istRochade,boolean istBauerDoppelschritt,boolean istEnPassant) {
-		D_Zug d_zug=new D_Zug();
-		d_zug.setInt("nummer",spiel.toD().getInt("zugZaehler"));
-		d_zug.setString("figurBewegt",figurBewegt.getKuerzel());
-		d_zug.setBool("figurBewegtIstWeiss",figurBewegt.istWeiss());
-		if (figurGeschlagen!=null) d_zug.setString("figurGeschlagen",figurGeschlagen.getKuerzel());
-		d_zug.setString("feldStart",sFeldStart);
-		d_zug.setString("feldZiel",sFeldZiel);
-		d_zug.setString("zeitstempel",""+System.currentTimeMillis());
-		spiel.getZugHistorie().add(d_zug);
+			boolean istRochade,boolean istBauerDoppelschritt,boolean istEnPassant,boolean bauernUmwandlungImGange,boolean bauernUmwandlung) {
 
-		
+		D_Zug d_zug=new D_Zug();
+		if (!bauernUmwandlung){
+			d_zug.setInt("nummer",spiel.toD().getInt("zugZaehler")+1);
+			d_zug.setString("figurBewegt",figurBewegt.getKuerzel());
+			d_zug.setBool("figurBewegtIstWeiss",figurBewegt.istWeiss());
+			if (figurGeschlagen!=null) d_zug.setString("figurGeschlagen",figurGeschlagen.getKuerzel());
+			d_zug.setString("feldStart",sFeldStart);
+			d_zug.setString("feldZiel",sFeldZiel);
+			d_zug.setString("zeitstempel",""+System.currentTimeMillis());
+			spiel.getZugHistorie().add(d_zug);
+		}
+		else{
+			d_zug=spiel.getLetzterZug();
+			d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
+			spiel.toD().setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
+		}
+
 		// SCHACH UND SCHACHMATT
 		if (binIchImSchach(figurBewegt,!figurBewegt.istWeiss())){
 			ArrayList<String> erlaubteZuege=new ArrayList<String>();
@@ -200,15 +253,21 @@ public class Regelwerk {
 		if (istBauerDoppelschritt) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerDoppelschritt);		
 		if (istRochade) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.Rochade);
 		if (istEnPassant) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.EnPassant);
+
+		if (bauernUmwandlungImGange){
+			// Zug noch nicht beendet
+			d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlungImGange);
+			spiel.toD().setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlungImGange);
+		}
+		else{
+			spiel.toD().incInt("zugZaehler");
+			spiel.toD().invertBool("weissAmZug");
+		}
 		
-		// ZUGZAEHLER
-		spiel.toD().incInt("zugZaehler");
-
-		// ZUGDATEN
-		spiel.toD().invertBool("weissAmZug");
-
-		System.out.println(spiel.toD());
+		System.out.println("letzter Zug:"+spiel.getLetzterZug());
+		System.out.println("d_Spiel:"+spiel.toD());
 	}
+
 
 	// bin ich selbst im Schach, wenn ich mich von dieser Position auf die neue Position bewege?
 	public boolean binIchImSchachDurchZug(String sFeldStart,String sFeldZiel){

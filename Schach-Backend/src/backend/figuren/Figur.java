@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import daten.D_Figur;
+import daten.FigurEnum;
 import daten.Xml;
 import backend.Parameter;
 import backend.spiel.Brett;
