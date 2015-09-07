@@ -63,8 +63,8 @@ public class Regelwerk {
 
 	public void ziehe(String sFeldStart,String sFeldZiel){
 		// Reset von Altdaten
-		spiel.toD().setBool("weissImSchach",false);					
-		spiel.toD().setBool("schwarzImSchach",false);
+		spiel.toD().setString("bemerkungSpielzug","");
+		spiel.toD().setString("bemerkungSchach","");
 		
 		Feld feldStart=brett.getFeld(sFeldStart);
 		if (feldStart==null) throw new RuntimeException("Das Feld "+sFeldStart+" ist ungueltig!");
@@ -177,21 +177,21 @@ public class Regelwerk {
 			if (erlaubteZuege.size()==0){
 				if (!figurBewegt.istWeiss()){
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
-					spiel.toD().setBool("weissSchachMatt",true);					
+					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
 				}
 				else{
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzSchachMatt);
-					spiel.toD().setBool("schwarzSchachMatt",true);					
+					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzSchachMatt);
 				}
 			}
 			else{
 				if (!figurBewegt.istWeiss()){
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissImSchach);
-					spiel.toD().setBool("weissImSchach",true);					
+					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissImSchach);
 				}
 				else{
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzImSchach);
-					spiel.toD().setBool("schwarzImSchach",true);
+					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzImSchach);
 				}
 			}
 		}

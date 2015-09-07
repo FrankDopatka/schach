@@ -4,11 +4,9 @@
 <properties>
 <entry key="zugZaehler">0</entry>
 <entry key="weissAmZug">true</entry>
-<entry key="weissSchachMatt">false</entry>
-<entry key="schwarzImSchach">false</entry>
-<entry key="weissImSchach">false</entry>
+<entry key="bemerkungSchach"/>
+<entry key="bemerkungSpielzug"/>
 <entry key="klasse">D_Spiel</entry>
-<entry key="schwarzSchachMatt">false</entry>
 </properties>
 <properties>
 <entry key="kuerzel">B</entry>

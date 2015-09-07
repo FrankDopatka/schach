@@ -55,10 +55,12 @@ public class Bauer extends Figur {
 			D_Zug letzterZug=getSpiel().getLetzterZug();
 			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
 				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
-				if (koordinatenAlt[0]==x-1)
-					felder.add(Brett.toKuerzel(x-1,y+1));
-				else if (koordinatenAlt[0]==x+1)
-					felder.add(Brett.toKuerzel(x+1,y+1));
+				if (koordinatenAlt[1]==y){
+					if (koordinatenAlt[0]==x-1)
+						felder.add(Brett.toKuerzel(x-1,y+1));
+					else if (koordinatenAlt[0]==x+1)
+						felder.add(Brett.toKuerzel(x+1,y+1));					
+				}
 			}
 		}
 		else{
@@ -90,10 +92,12 @@ public class Bauer extends Figur {
 			D_Zug letzterZug=getSpiel().getLetzterZug();
 			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
 				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
-				if (koordinatenAlt[0]==x-1)
-					felder.add(Brett.toKuerzel(x-1,y-1));
-				else if (koordinatenAlt[0]==x+1)
-					felder.add(Brett.toKuerzel(x+1,y-1));
+				if (koordinatenAlt[1]==y){
+					if (koordinatenAlt[0]==x-1)
+						felder.add(Brett.toKuerzel(x-1,y-1));
+					else if (koordinatenAlt[0]==x+1)
+						felder.add(Brett.toKuerzel(x+1,y-1));
+				}
 			}
 		}
 		return felder;
