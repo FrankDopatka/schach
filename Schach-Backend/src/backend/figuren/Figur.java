@@ -80,7 +80,6 @@ public abstract class Figur {
 		return false;
 	}
 	
-
 	protected boolean addZug(ArrayList<String> felder,String kuerzel){
 		return addZug(felder,Brett.fromKuerzel(kuerzel)[0],Brett.fromKuerzel(kuerzel)[1]);
 	}
@@ -210,5 +209,13 @@ public abstract class Figur {
 
 	public String toXml() {
 		return Xml.fromD(toD());
+	}
+	
+	protected ArrayList<String> initFelder(){
+		ArrayList<String> felder=new ArrayList<String>();
+		if (istGeschlagen()) return null;
+		if (getSpiel().weissSchachMatt()||getSpiel().schwarzSchachMatt()) return null;
+		if (getSpiel().istPatt()) return null;
+		return felder;
 	}
 }

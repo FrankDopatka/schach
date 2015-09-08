@@ -15,9 +15,8 @@ public class Springer extends Figur {
 
 	@Override
 	public ArrayList<String> getErlaubteZuege(){
-		ArrayList<String> felder=new ArrayList<String>();
-		if (istGeschlagen()) return felder;
-		if (getSpiel().weissSchachMatt()||getSpiel().schwarzSchachMatt()) return felder;
+		ArrayList<String> felder=initFelder();
+		if (felder==null) return new ArrayList<String>();
 		Feld feldStart=getFeld();
 		int x=feldStart.getPosX();
 		int y=feldStart.getPosY();

@@ -3,7 +3,7 @@ package backend.figuren;
 import java.util.ArrayList;
 
 import daten.D_Zug;
-import daten.D_Zug_Bemerkung;
+import daten.ZugEnum;
 import backend.spiel.Brett;
 import backend.spiel.Feld;
 import backend.spiel.Spiel;
@@ -18,9 +18,8 @@ public class Bauer extends Figur {
 
 	@Override
 	public ArrayList<String> getErlaubteZuege(){
-		ArrayList<String> felder=new ArrayList<String>();
-		if (istGeschlagen()) return felder;
-		if (getSpiel().weissSchachMatt()||getSpiel().schwarzSchachMatt()) return felder;
+		ArrayList<String> felder=initFelder();
+		if (felder==null) return new ArrayList<String>();
 		Feld feldStart=getFeld();
 		Feld feldDazwischen=null;
 		Feld feldZiel=null;
@@ -54,7 +53,7 @@ public class Bauer extends Figur {
 			}
 			// en passant moeglich?
 			D_Zug letzterZug=getSpiel().getLetzterZug();
-			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
+			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerDoppelschritt))){
 				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
 				if (koordinatenAlt[1]==y){
 					if (koordinatenAlt[0]==x-1)
@@ -91,7 +90,7 @@ public class Bauer extends Figur {
 			}
 			// en passant moeglich?
 			D_Zug letzterZug=getSpiel().getLetzterZug();
-			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
+			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerDoppelschritt))){
 				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
 				if (koordinatenAlt[1]==y){
 					if (koordinatenAlt[0]==x-1)

@@ -28,11 +28,11 @@ public class Updater extends Thread{
 				if (zaehlerClient!=zaehlerServer){
 					update(bemerkungSchach,bemerkungSpielzug,zaehlerServer);					
 				}
-				else if (bemerkungSpielzug.equals(""+D_Zug_Bemerkung.BauerUmwandlungImGange)&&(!bauernUmwandlungImGange)){
+				else if (bemerkungSpielzug.equals(""+ZugEnum.BauerUmwandlungImGange)&&(!bauernUmwandlungImGange)){
 					if (frontend.ichSpieleWeiss()==d_spiel.getBool("weissAmZug")) frontend.setBauerUmwandelnImGange();	
 					bauernUmwandlungImGange=true;
 				}
-				else if ((bauernUmwandlungImGange)&&(bemerkungSpielzug.equals(""+D_Zug_Bemerkung.BauerUmwandlung))){
+				else if ((bauernUmwandlungImGange)&&(bemerkungSpielzug.equals(""+ZugEnum.BauerUmwandlung))){
 					update(bemerkungSchach,bemerkungSpielzug,zaehlerServer);
 					bauernUmwandlungImGange=false;
 				}
@@ -47,10 +47,10 @@ public class Updater extends Thread{
 			frontend.setBrett(backendSpiel.getBildWeiss());
 		else
 			frontend.setBrett(backendSpiel.getBildSchwarz());
-		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.WeissImSchach)) System.out.println("SCHACH WEISS!");
-		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.SchwarzImSchach)) System.out.println("SCHACH SCHWARZ!");
-		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.WeissSchachMatt)) System.out.println("SCHACHMATT WEISS!");
-		if (bemerkungSchach.equals(""+D_Zug_Bemerkung.SchwarzSchachMatt)) System.out.println("SCHACHMATT SCHWARZ!");
+		if (bemerkungSchach.equals(""+ZugEnum.WeissImSchach)) System.out.println("SCHACH WEISS!");
+		if (bemerkungSchach.equals(""+ZugEnum.SchwarzImSchach)) System.out.println("SCHACH SCHWARZ!");
+		if (bemerkungSchach.equals(""+ZugEnum.WeissSchachMatt)) System.out.println("SCHACHMATT WEISS!");
+		if (bemerkungSchach.equals(""+ZugEnum.SchwarzSchachMatt)) System.out.println("SCHACHMATT SCHWARZ!");
 		frontend.setZugZaehler(zaehlerServer);
 	}
 }

@@ -1,5 +1,5 @@
 package daten;
 
-public enum D_Zug_Bemerkung {
+public enum ZugEnum {
 	Rochade,EnPassant,WeissImSchach,WeissSchachMatt,SchwarzImSchach,SchwarzSchachMatt,BauerDoppelschritt,BauerUmwandlung,BauerUmwandlungImGange,Patt;
 }

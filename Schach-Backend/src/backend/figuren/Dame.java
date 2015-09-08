@@ -1,6 +1,7 @@
 package backend.figuren;
 
 import java.util.ArrayList;
+
 import backend.spiel.Feld;
 import backend.spiel.Spiel;
 
@@ -14,9 +15,8 @@ public class Dame extends Figur {
 
 	@Override
 	public ArrayList<String> getErlaubteZuege(){
-		ArrayList<String> felder=new ArrayList<String>();
-		if (istGeschlagen()) return felder;
-		if (getSpiel().weissSchachMatt()||getSpiel().schwarzSchachMatt()) return felder;
+		ArrayList<String> felder=initFelder();
+		if (felder==null) return new ArrayList<String>();
 		Feld feldStart=getFeld();
 		int x=feldStart.getPosX();
 		int y=feldStart.getPosY();

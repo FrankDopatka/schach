@@ -3,7 +3,7 @@ package backend.spiel;
 import java.util.ArrayList;
 
 import daten.D_Zug;
-import daten.D_Zug_Bemerkung;
+import daten.ZugEnum;
 import daten.FigurEnum;
 import backend.figuren.*;
 
@@ -66,7 +66,7 @@ public class Regelwerk {
 		D_Zug zug=spiel.getLetzterZug();
 		if (zug==null) 
 			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
-		if (!zug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerUmwandlungImGange))
+		if (!zug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerUmwandlungImGange))
 			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
 		// Auswahl
 		Figur figur=null;
@@ -91,7 +91,7 @@ public class Regelwerk {
 		figuren.remove(bauerAlt);
 		//neue Figur setzen
 		figur.setFeld(feld);
-		zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
+		zug.setString("bemerkungSpielzug",""+ZugEnum.BauerUmwandlung);
 		figuren.add(figur);
 		// Zug vollenden
 		gezogen(figur,figur,zug.getString("feldZiel"),zug.getString("feldZiel"),false,false,false,false,true);
@@ -126,7 +126,7 @@ public class Regelwerk {
 		// en passant
 		boolean istEnPassant=false;
 		D_Zug letzterZug=spiel.getLetzterZug();
-		if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerDoppelschritt))){
+		if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerDoppelschritt))){
 			if ((brett.getFeld(sFeldStart).getFigur() instanceof Bauer)&&(figurZiel==null)&&(koordinatenAlt[0]!=koordinatenNeu[0])){
 				Figur bauerZuSchlagen=brett.getFeld(letzterZug.getString("feldZiel")).getFigur();
 				bauerZuSchlagen.setFeld(null);
@@ -207,8 +207,8 @@ public class Regelwerk {
 		}
 		else{
 			d_zug=spiel.getLetzterZug();
-			d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
-			spiel.toD().setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
+			d_zug.setString("bemerkungSpielzug",""+ZugEnum.BauerUmwandlung);
+			spiel.toD().setString("bemerkungSpielzug",""+ZugEnum.BauerUmwandlung);
 		}
 
 		ArrayList<String> erlaubteZuegeGesamt=getErlaubteZuegeGesamt(!figurBewegt.istWeiss());
@@ -216,42 +216,42 @@ public class Regelwerk {
 			// Schach und Schachmatt
 			if (erlaubteZuegeGesamt.size()==0){
 				if (!figurBewegt.istWeiss()){
-					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
-					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
+					d_zug.setString("bemerkungSchach",""+ZugEnum.WeissSchachMatt);
+					spiel.toD().setString("bemerkungSchach",""+ZugEnum.WeissSchachMatt);
 				}
 				else{
-					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzSchachMatt);
-					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzSchachMatt);
+					d_zug.setString("bemerkungSchach",""+ZugEnum.SchwarzSchachMatt);
+					spiel.toD().setString("bemerkungSchach",""+ZugEnum.SchwarzSchachMatt);
 				}
 			}
 			else{
 				if (!figurBewegt.istWeiss()){
-					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissImSchach);
-					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissImSchach);
+					d_zug.setString("bemerkungSchach",""+ZugEnum.WeissImSchach);
+					spiel.toD().setString("bemerkungSchach",""+ZugEnum.WeissImSchach);
 				}
 				else{
-					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzImSchach);
-					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.SchwarzImSchach);
+					d_zug.setString("bemerkungSchach",""+ZugEnum.SchwarzImSchach);
+					spiel.toD().setString("bemerkungSchach",""+ZugEnum.SchwarzImSchach);
 				}
 			}
 		}
 		else{
 			// Patt
 			if (erlaubteZuegeGesamt.size()==0){
-				d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.Patt);
-				spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.Patt);				
+				d_zug.setString("bemerkungSchach",""+ZugEnum.Patt);
+				spiel.toD().setString("bemerkungSchach",""+ZugEnum.Patt);
 			}
 		}
 
 		// Spezialzuege
-		if (istBauerDoppelschritt) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerDoppelschritt);		
-		if (istRochade) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.Rochade);
-		if (istEnPassant) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.EnPassant);
+		if (istBauerDoppelschritt) d_zug.setString("bemerkungSpielzug",""+ZugEnum.BauerDoppelschritt);		
+		if (istRochade) d_zug.setString("bemerkungSpielzug",""+ZugEnum.Rochade);
+		if (istEnPassant) d_zug.setString("bemerkungSpielzug",""+ZugEnum.EnPassant);
 		// Bauernumwandlung
 		if (bauernUmwandlungImGange){
 			// ...dann ist der Zug noch nicht beendet
-			d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlungImGange);
-			spiel.toD().setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlungImGange);
+			d_zug.setString("bemerkungSpielzug",""+ZugEnum.BauerUmwandlungImGange);
+			spiel.toD().setString("bemerkungSpielzug",""+ZugEnum.BauerUmwandlungImGange);
 		}
 		else{
 			// Zug beenden

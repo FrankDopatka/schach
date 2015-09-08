@@ -95,20 +95,20 @@ public class Spiel {
 		return d_Spiel.getBool("weissAmZug");
 	}
 	public boolean weissImSchach() {
-		return d_Spiel.getBool("weissImSchach");
+		return d_Spiel.getString("bemerkungSchach").equals(ZugEnum.WeissImSchach);
 	}
 	public boolean weissSchachMatt() {
-		return d_Spiel.getBool("weissSchachMatt");
+		return d_Spiel.getString("bemerkungSchach").equals(ZugEnum.WeissSchachMatt);
 	}
 
 	public boolean schwarzAmZug() {
 		return !weissAmZug();
 	}
 	public boolean schwarzImSchach() {
-		return d_Spiel.getBool("schwarzImSchach");
+		return d_Spiel.getString("bemerkungSchach").equals(ZugEnum.SchwarzImSchach);
 	}
 	public boolean schwarzSchachMatt() {
-		return d_Spiel.getBool("schwarzSchachMatt");
+		return d_Spiel.getString("bemerkungSchach").equals(ZugEnum.SchwarzSchachMatt);
 	}
 	
 	public boolean istImSchach(boolean weiss) {
@@ -118,6 +118,10 @@ public class Spiel {
 	public boolean istSchachMatt(boolean weiss) {
 		if (weiss) return weissSchachMatt();
 		return schwarzSchachMatt();
+	}
+	
+	public boolean istPatt(){
+		return d_Spiel.getString("bemerkungSchach").equals(ZugEnum.Patt);		
 	}
 	
 	public ArrayList<D_Zug> getZugHistorie(){
