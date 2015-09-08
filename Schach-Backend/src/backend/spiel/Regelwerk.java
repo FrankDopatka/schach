@@ -61,7 +61,6 @@ public class Regelwerk {
 		for(Figur f:getFiguren(FigurEnum.Bauer,weiss)) if (f.istGeschlagen()) ergebnis.add(f);
 		return ergebnis;
 	}
-
 	
 	public void bauernUmwandlung(String zuFigur){
 		D_Zug zug=spiel.getLetzterZug();
@@ -69,7 +68,7 @@ public class Regelwerk {
 			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
 		if (!zug.getString("bemerkungSpielzug").equals(""+D_Zug_Bemerkung.BauerUmwandlungImGange))
 			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
-
+		// Auswahl
 		Figur figur=null;
 		switch (zuFigur){
 		case "Dame":
@@ -90,11 +89,11 @@ public class Regelwerk {
 		Figur bauerAlt=feld.getFigur();
 		bauerAlt.setFeld(null);
 		figuren.remove(bauerAlt);
-		
 		//neue Figur setzen
 		figur.setFeld(feld);
 		zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
 		figuren.add(figur);
+		// Zug vollenden
 		gezogen(figur,figur,zug.getString("feldZiel"),zug.getString("feldZiel"),false,false,false,false,true);
 	}
 	
@@ -102,7 +101,7 @@ public class Regelwerk {
 		// Reset von Altdaten
 		spiel.toD().setString("bemerkungSpielzug","");
 		spiel.toD().setString("bemerkungSchach","");
-		
+		// Daten auslesen
 		Feld feldStart=brett.getFeld(sFeldStart);
 		if (feldStart==null) throw new RuntimeException("Das Feld "+sFeldStart+" ist ungueltig!");
 		Feld feldZiel=brett.getFeld(sFeldZiel);
@@ -167,7 +166,6 @@ public class Regelwerk {
 		// Figur bewegen
 		figurStart.setFeld(feldZiel);
 		figurStart.wurdeBewegt();
-
 		// Bauernumwandlung?
 		boolean bauernUmwandlungImGange=false;
 		if (figurStart instanceof Bauer){
@@ -196,7 +194,6 @@ public class Regelwerk {
 	
 	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,
 			boolean istRochade,boolean istBauerDoppelschritt,boolean istEnPassant,boolean bauernUmwandlungImGange,boolean bauernUmwandlung) {
-
 		D_Zug d_zug=new D_Zug();
 		if (!bauernUmwandlung){
 			d_zug.setInt("nummer",spiel.toD().getInt("zugZaehler")+1);
@@ -214,20 +211,10 @@ public class Regelwerk {
 			spiel.toD().setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlung);
 		}
 
-		// SCHACH UND SCHACHMATT
+		ArrayList<String> erlaubteZuegeGesamt=getErlaubteZuegeGesamt(!figurBewegt.istWeiss());
 		if (binIchImSchach(figurBewegt,!figurBewegt.istWeiss())){
-			ArrayList<String> erlaubteZuege=new ArrayList<String>();
-			for (Figur f:getFigurenAufFeld(!figurBewegt.istWeiss())){
-				ArrayList<String> erlaubt=f.getErlaubteZuege();
-				if (erlaubt!=null){
-					for (String feld:erlaubt){
-						if ((!erlaubteZuege.contains(feld))&&(!binIchImSchachDurchZug(f.getFeld().getKuerzel(),feld))){
-							erlaubteZuege.add(feld);					
-						}
-					}						
-				}				
-			}
-			if (erlaubteZuege.size()==0){
+			// Schach und Schachmatt
+			if (erlaubteZuegeGesamt.size()==0){
 				if (!figurBewegt.istWeiss()){
 					d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
 					spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.WeissSchachMatt);
@@ -248,18 +235,26 @@ public class Regelwerk {
 				}
 			}
 		}
+		else{
+			// Patt
+			if (erlaubteZuegeGesamt.size()==0){
+				d_zug.setString("bemerkungSchach",""+D_Zug_Bemerkung.Patt);
+				spiel.toD().setString("bemerkungSchach",""+D_Zug_Bemerkung.Patt);				
+			}
+		}
 
-		// SPEZIALZUEGE: BAUER DOPPELSCHRITT, ROCHADE, EN PASSANT
+		// Spezialzuege
 		if (istBauerDoppelschritt) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerDoppelschritt);		
 		if (istRochade) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.Rochade);
 		if (istEnPassant) d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.EnPassant);
-
+		// Bauernumwandlung
 		if (bauernUmwandlungImGange){
-			// Zug noch nicht beendet
+			// ...dann ist der Zug noch nicht beendet
 			d_zug.setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlungImGange);
 			spiel.toD().setString("bemerkungSpielzug",""+D_Zug_Bemerkung.BauerUmwandlungImGange);
 		}
 		else{
+			// Zug beenden
 			spiel.toD().incInt("zugZaehler");
 			spiel.toD().invertBool("weissAmZug");
 		}
@@ -297,6 +292,21 @@ public class Regelwerk {
 			}
 		}
 		return ergebnis;
+	}
+	
+	private ArrayList<String> getErlaubteZuegeGesamt(boolean vonWeiss){
+		ArrayList<String> erlaubteZuege=new ArrayList<String>();
+		for (Figur f:getFigurenAufFeld(vonWeiss)){
+			ArrayList<String> erlaubt=f.getErlaubteZuege();
+			if (erlaubt!=null){
+				for (String feld:erlaubt){
+					if ((!erlaubteZuege.contains(feld))&&(!binIchImSchachDurchZug(f.getFeld().getKuerzel(),feld))){
+						erlaubteZuege.add(feld);					
+					}
+				}						
+			}				
+		}
+		return erlaubteZuege;
 	}
 	
 	private Figur zieheTestweise(Figur ziehendeFigur,String sFeldStart,String sFeldZiel){
