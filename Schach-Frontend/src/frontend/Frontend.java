@@ -165,6 +165,19 @@ public class Frontend extends JFrame{
 	public void setZugZaehler(int zugZaehler) {
 		this.zugZaehler = zugZaehler;
 	}
+	
+	public void resetLog(){
+		jLog.setText("");
+	}
+	
+	public void printLog(String text){
+		jLog.setText(jLog.getText()+text);
+	}
+
+	public void printlnLog(String text){
+		printLog(text+"\n");
+	}
+
 
 	public void markiereFelder(int x,int y,ArrayList<String> felderErlaubt){
 		markiereFelder(toKuerzel(x,y),felderErlaubt);

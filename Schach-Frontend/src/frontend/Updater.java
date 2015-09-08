@@ -1,5 +1,7 @@
 package frontend;
 
+import java.util.ArrayList;
+
 import backend.BackendSpielStub;
 import daten.*;
 
@@ -47,10 +49,14 @@ public class Updater extends Thread{
 			frontend.setBrett(backendSpiel.getBildWeiss());
 		else
 			frontend.setBrett(backendSpiel.getBildSchwarz());
-		if (bemerkungSchach.equals(""+ZugEnum.WeissImSchach)) System.out.println("SCHACH WEISS!");
-		if (bemerkungSchach.equals(""+ZugEnum.SchwarzImSchach)) System.out.println("SCHACH SCHWARZ!");
-		if (bemerkungSchach.equals(""+ZugEnum.WeissSchachMatt)) System.out.println("SCHACHMATT WEISS!");
-		if (bemerkungSchach.equals(""+ZugEnum.SchwarzSchachMatt)) System.out.println("SCHACHMATT SCHWARZ!");
+		if (bemerkungSchach.equals(""+ZugEnum.Patt)) System.out.println("PATT!");
 		frontend.setZugZaehler(zaehlerServer);
+		frontend.resetLog();
+		ArrayList<D> zugHistorie=Xml.toArray(backendSpiel.getZugHistorie());
+		for(D datenwert:zugHistorie){
+			D_Zug zug=(D_Zug)datenwert;
+			frontend.printLog(zug.toPGN());
+			if (zug.getInt("nummer")%2==0) frontend.printlnLog("");
+		}
 	}
 }

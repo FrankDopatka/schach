@@ -10,7 +10,7 @@ public class Springer extends Figur {
 	public Springer(){
 	}
 	public Springer(Spiel spiel,boolean istWeiss) {
-		super(spiel,"S",istWeiss);
+		super(spiel,"S",istWeiss); // kNnight
 	}
 
 	@Override

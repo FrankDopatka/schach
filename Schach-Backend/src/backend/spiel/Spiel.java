@@ -19,7 +19,7 @@ import backend.figuren.*;
 public class Spiel {
 	private Brett brett=null;
 	private ArrayList<Figur> figuren=new ArrayList<Figur>();
-	private ArrayList<D_Zug> zugHistorie=new ArrayList<D_Zug>();
+	private ArrayList<D> zugHistorie=new ArrayList<D>();
 	private Regelwerk regelwerk=null;;
 	private D_Spiel d_Spiel=null;
 	
@@ -124,13 +124,18 @@ public class Spiel {
 		return d_Spiel.getString("bemerkungSchach").equals(ZugEnum.Patt);		
 	}
 	
-	public ArrayList<D_Zug> getZugHistorie(){
+	public ArrayList<D> getZugHistorie(){
 		return zugHistorie;
 	}
 	
-	public D_Zug getLetzterZug(){
+	public D getLetzterZug(){
 		if ((zugHistorie==null)||(zugHistorie.size()==0)) return null;
 		return (zugHistorie.get(zugHistorie.size()-1));
+	}
+	
+	public void addZug(D zug){
+		System.out.println(zug);
+		zugHistorie.add(zug);
 	}
 	
 	public BufferedImage getBildWeiss(){
@@ -239,7 +244,7 @@ public class Spiel {
 		for(Figur figur:figuren){
 			xml.append(figur.toXml());			
 		}
-		for(D_Zug zug:zugHistorie){
+		for(D zug:zugHistorie){
 			xml.append(zug.toXml());			
 		}
 		return xml.toString();

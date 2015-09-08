@@ -2,8 +2,7 @@ package backend.figuren;
 
 import java.util.ArrayList;
 
-import daten.D_Zug;
-import daten.ZugEnum;
+import daten.*;
 import backend.spiel.Brett;
 import backend.spiel.Feld;
 import backend.spiel.Spiel;
@@ -13,7 +12,7 @@ public class Bauer extends Figur {
 	public Bauer(){
 	}
 	public Bauer(Spiel spiel,boolean istWeiss) {
-		super(spiel,"B",istWeiss);
+		super(spiel,"B",istWeiss); // Pawn, wird meist weggelassen
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public class Bauer extends Figur {
 				if ((feldZiel!=null)&&(feldZiel.hatGegnerischeFigur(this))) felder.add(Brett.toKuerzel(x+1,y+1));				
 			}
 			// en passant moeglich?
-			D_Zug letzterZug=getSpiel().getLetzterZug();
+			D letzterZug=getSpiel().getLetzterZug();
 			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerDoppelschritt))){
 				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
 				if (koordinatenAlt[1]==y){
@@ -89,7 +88,7 @@ public class Bauer extends Figur {
 				if ((feldZiel!=null)&&(feldZiel.hatGegnerischeFigur(this))) felder.add(Brett.toKuerzel(x+1,y-1));
 			}
 			// en passant moeglich?
-			D_Zug letzterZug=getSpiel().getLetzterZug();
+			D letzterZug=getSpiel().getLetzterZug();
 			if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerDoppelschritt))){
 				int koordinatenAlt[]=Brett.fromKuerzel(letzterZug.getString("feldZiel"));
 				if (koordinatenAlt[1]==y){

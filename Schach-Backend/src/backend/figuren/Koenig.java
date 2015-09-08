@@ -6,7 +6,7 @@ import backend.spiel.Brett;
 import backend.spiel.Feld;
 import backend.spiel.Spiel;
 
-public class Koenig extends Figur {
+public class Koenig extends Figur { // KOENIG
 
 	public Koenig(){
 	}

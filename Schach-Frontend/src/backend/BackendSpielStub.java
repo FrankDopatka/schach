@@ -37,6 +37,9 @@ public class BackendSpielStub implements iBackendSpiel{
 		return s;
 	}
 	
+	
+	
+	
 	@Override
 	public BufferedImage getBildWeiss() {
 		BufferedImage bild=null;
@@ -50,7 +53,6 @@ public class BackendSpielStub implements iBackendSpiel{
 			throw new RuntimeException("Fehler bei der Kommunikation zum Server in getBildWeiss(): "+url+"getBild/");
 		}
 	}
-	
 
 	@Override
 	public BufferedImage getBildSchwarz() {
@@ -65,7 +67,6 @@ public class BackendSpielStub implements iBackendSpiel{
 			throw new RuntimeException("Fehler bei der Kommunikation zum Server in getBildWeiss(): "+url+"getBild/");
 		}
 	}
-
 
 	@Override
 	public String getFigur(String feld) {
@@ -83,12 +84,17 @@ public class BackendSpielStub implements iBackendSpiel{
 	}
 
 	@Override
+	public String bauerUmwandlung(String zuFigur) {
+		return getXmlvonRest("bauerUmwandlung"+"/"+zuFigur);
+	}
+
+	@Override
 	public String getSpielDaten() {
 		return getXmlvonRest("getSpielDaten");
 	}
 	
 	@Override
-	public String bauerUmwandlung(String zuFigur) {
-		return getXmlvonRest("bauerUmwandlung"+"/"+zuFigur);
+	public String getZugHistorie() {
+		return getXmlvonRest("getZugHistorie");
 	}
 }

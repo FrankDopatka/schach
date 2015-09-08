@@ -2,9 +2,7 @@ package backend.spiel;
 
 import java.util.ArrayList;
 
-import daten.D_Zug;
-import daten.ZugEnum;
-import daten.FigurEnum;
+import daten.*;
 import backend.figuren.*;
 
 public class Regelwerk {
@@ -63,27 +61,23 @@ public class Regelwerk {
 	}
 	
 	public void bauernUmwandlung(String zuFigur){
-		D_Zug zug=spiel.getLetzterZug();
-		if (zug==null) 
+		D zug=spiel.getLetzterZug();
+		if ((zuFigur==null)||(zug==null)) 
 			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
 		if (!zug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerUmwandlungImGange))
 			throw new RuntimeException("bauernUmwandlung(): Der Aufruf ist ungueltig!");
 		// Auswahl
 		Figur figur=null;
-		switch (zuFigur){
-		case "Dame":
+		if (zuFigur.equals(""+FigurEnum.Dame))
 			figur=new Dame(spiel,zug.getBool("figurBewegtIstWeiss"));
-			break;
-		case "Turm":
+		else if (zuFigur.equals(""+FigurEnum.Turm))
 			figur=new Turm(spiel,zug.getBool("figurBewegtIstWeiss"));
-			break;
-		case "Laeufer":
+		else if (zuFigur.equals(""+FigurEnum.Laeufer))
 			figur=new Laeufer(spiel,zug.getBool("figurBewegtIstWeiss"));
-			break;
-		case "Springer":
+		else if (zuFigur.equals(""+FigurEnum.Springer))
 			figur=new Springer(spiel,zug.getBool("figurBewegtIstWeiss"));
-			break;
-		}
+		else
+			throw new RuntimeException("bauernUmwandlung(): Die gewuenschte Figur ist unguelting!");
 		Feld feld=brett.getFeld(zug.getString("feldZiel"));
 		// alten Bauer entfernen
 		Figur bauerAlt=feld.getFigur();
@@ -92,6 +86,7 @@ public class Regelwerk {
 		//neue Figur setzen
 		figur.setFeld(feld);
 		zug.setString("bemerkungSpielzug",""+ZugEnum.BauerUmwandlung);
+		zug.setString("bauernumwandlungFigurNeu",figur.getKuerzel());
 		figuren.add(figur);
 		// Zug vollenden
 		gezogen(figur,figur,zug.getString("feldZiel"),zug.getString("feldZiel"),false,false,false,false,true);
@@ -125,7 +120,7 @@ public class Regelwerk {
 		}
 		// en passant
 		boolean istEnPassant=false;
-		D_Zug letzterZug=spiel.getLetzterZug();
+		D letzterZug=spiel.getLetzterZug();
 		if ((letzterZug!=null)&&(letzterZug.getString("bemerkungSpielzug").equals(""+ZugEnum.BauerDoppelschritt))){
 			if ((brett.getFeld(sFeldStart).getFigur() instanceof Bauer)&&(figurZiel==null)&&(koordinatenAlt[0]!=koordinatenNeu[0])){
 				Figur bauerZuSchlagen=brett.getFeld(letzterZug.getString("feldZiel")).getFigur();
@@ -194,7 +189,7 @@ public class Regelwerk {
 	
 	private void gezogen(Figur figurBewegt,Figur figurGeschlagen,String sFeldStart,String sFeldZiel,
 			boolean istRochade,boolean istBauerDoppelschritt,boolean istEnPassant,boolean bauernUmwandlungImGange,boolean bauernUmwandlung) {
-		D_Zug d_zug=new D_Zug();
+		D d_zug=new D_Zug();
 		if (!bauernUmwandlung){
 			d_zug.setInt("nummer",spiel.toD().getInt("zugZaehler")+1);
 			d_zug.setString("figurBewegt",figurBewegt.getKuerzel());
@@ -203,7 +198,6 @@ public class Regelwerk {
 			d_zug.setString("feldStart",sFeldStart);
 			d_zug.setString("feldZiel",sFeldZiel);
 			d_zug.setString("zeitstempel",""+System.currentTimeMillis());
-			spiel.getZugHistorie().add(d_zug);
 		}
 		else{
 			d_zug=spiel.getLetzterZug();
@@ -258,9 +252,7 @@ public class Regelwerk {
 			spiel.toD().incInt("zugZaehler");
 			spiel.toD().invertBool("weissAmZug");
 		}
-		
-		System.out.println("letzter Zug:"+spiel.getLetzterZug());
-		System.out.println("d_Spiel:"+spiel.toD());
+		if (!bauernUmwandlung) spiel.addZug(d_zug);
 	}
 
 

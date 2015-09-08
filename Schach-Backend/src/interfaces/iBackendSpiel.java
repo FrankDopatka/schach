@@ -5,7 +5,10 @@ public interface iBackendSpiel {
 	Object getBildSchwarz();
 	String getFigur(String feld);
 	String getErlaubteZuege(String feld);
+	
 	String ziehe(String feldVon,String feldNach);
-	String getSpielDaten();
 	String bauerUmwandlung(String zuFigur);
+
+	String getSpielDaten();
+	String getZugHistorie();
 }

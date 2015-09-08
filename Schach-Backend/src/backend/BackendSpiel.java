@@ -134,6 +134,22 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
 		}
 	}
+	
+	@GET
+	@Path("bauerUmwandlung/{zuFigur}")
+	@Consumes("text/plain")
+	@Produces("application/xml")
+	@Override
+	public String bauerUmwandlung(
+			@PathParam("zuFigur") String zuFigur) {
+		try{
+			spiel.getRegelwerk().bauernUmwandlung(zuFigur);
+			return Xml.verpacken(Xml.fromD(spiel.toD()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
+		}
+	}
 
 	@GET
 	@Path("getSpielDaten")
@@ -150,15 +166,13 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 	}
 
 	@GET
-	@Path("bauerUmwandlung/{zuFigur}")
-	@Consumes("text/plain")
+	@Path("getZugHistorie")
 	@Produces("application/xml")
 	@Override
-	public String bauerUmwandlung(
-			@PathParam("zuFigur") String zuFigur) {
+	public String getZugHistorie() {
 		try{
-			spiel.getRegelwerk().bauernUmwandlung(zuFigur);
-			return Xml.verpacken(Xml.fromD(spiel.toD()));
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
+			return Xml.verpacken(Xml.fromArray(spiel.getZugHistorie()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
