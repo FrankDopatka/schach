@@ -67,12 +67,32 @@ public class BackendSpielStub implements iBackendSpiel{
 			throw new RuntimeException("Fehler bei der Kommunikation zum Server in getBildWeiss(): "+url+"getBild/");
 		}
 	}
+	
+	@Override
+	public String getAlleFiguren() {
+		return getXmlvonRest("getAlleFiguren");
+	}
+	
+	@Override
+	public String getFigurenAufFeld(boolean weiss) {
+		return getXmlvonRest("getFigurenAufFeld"+"/"+weiss);
+	}
 
+	@Override
+	public String getGeschlageneFiguren(boolean weiss) {
+		return getXmlvonRest("getGeschlageneFiguren"+"/"+weiss);
+	}
+	
 	@Override
 	public String getFigur(String feld) {
 		return getXmlvonRest("getFigur"+"/"+feld);
 	}
-
+	
+	@Override
+	public String getKoenig(boolean weiss) {
+		return getXmlvonRest("getKoenig"+"/"+weiss);
+	}
+	
 	@Override
 	public String getErlaubteZuege(String feld) {
 		return getXmlvonRest("getErlaubteZuege"+"/"+feld);
@@ -88,6 +108,7 @@ public class BackendSpielStub implements iBackendSpiel{
 		return getXmlvonRest("bauerUmwandlung"+"/"+zuFigur);
 	}
 
+	
 	@Override
 	public String getSpielDaten() {
 		return getXmlvonRest("getSpielDaten");
@@ -96,5 +117,10 @@ public class BackendSpielStub implements iBackendSpiel{
 	@Override
 	public String getZugHistorie() {
 		return getXmlvonRest("getZugHistorie");
+	}
+
+	@Override
+	public String getLetzterZug() {
+		return getXmlvonRest("getLetzterZug");
 	}
 }

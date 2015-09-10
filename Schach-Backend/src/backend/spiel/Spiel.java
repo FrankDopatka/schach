@@ -242,7 +242,7 @@ public class Spiel {
 		StringBuffer xml=new StringBuffer();
 		xml.append(Xml.fromD(this.toD()));
 		for(Figur figur:figuren){
-			xml.append(figur.toXml());			
+			xml.append(figur.toXml());
 		}
 		for(D zug:zugHistorie){
 			xml.append(zug.toXml());			

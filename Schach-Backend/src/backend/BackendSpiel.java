@@ -39,9 +39,10 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 	@Path("getBildWeiss")
 	@Produces("image/png")
 	@Override
-	public Response getBildWeiss(){
+	public Object getBildWeiss(){
 	  try {
 		  ByteArrayOutputStream baos=new ByteArrayOutputStream();
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			ImageIO.write(spiel.getBildWeiss(),"png",baos);
 		  byte[] imageData=baos.toByteArray();
 		  return Response.ok(new ByteArrayInputStream(imageData)).build();
@@ -58,11 +59,73 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 	public Object getBildSchwarz() {
 	  try {
 		  ByteArrayOutputStream baos=new ByteArrayOutputStream();
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			ImageIO.write(spiel.getBildSchwarz(),"png",baos);
 		  byte[] imageData=baos.toByteArray();
 		  return Response.ok(new ByteArrayInputStream(imageData)).build();
 		} catch (Exception e) {
 		  return Response.serverError().build();
+		}
+	}
+	
+	@GET
+	@Path("getAlleFiguren")
+	@Produces("application/xml")
+	@Override
+	public String getAlleFiguren() {
+		try{
+			StringBuffer xml=new StringBuffer(); 
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
+			ArrayList<Figur> figuren=spiel.getFiguren();
+			for(Figur figur:figuren){
+				xml.append(figur.toXml());
+			}
+			return Xml.verpacken(xml.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
+		}
+	}
+	
+	@GET
+	@Path("getFigurenAufFeld/{weiss}")
+	@Consumes("text/plain")
+	@Produces("application/xml")
+	@Override
+	public String getFigurenAufFeld(
+			@PathParam("weiss") boolean weiss) {
+		try{
+			StringBuffer xml=new StringBuffer(); 
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
+			ArrayList<Figur> figuren=spiel.getRegelwerk().getFigurenAufFeld(weiss);
+			for(Figur figur:figuren){
+				xml.append(figur.toXml());
+			}
+			return Xml.verpacken(xml.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
+		}
+	}
+
+	@GET
+	@Path("getGeschlageneFiguren/{weiss}")
+	@Consumes("text/plain")
+	@Produces("application/xml")
+	@Override
+	public String getGeschlageneFiguren(
+			@PathParam("weiss") boolean weiss) {
+		try{
+			StringBuffer xml=new StringBuffer(); 
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
+			ArrayList<Figur> figuren=spiel.getRegelwerk().getGeschlageneFiguren(weiss);
+			for(Figur figur:figuren){
+				xml.append(figur.toXml());
+			}
+			return Xml.verpacken(xml.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
 		}
 	}
 
@@ -74,12 +137,30 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 	public String getFigur(
 			@PathParam("feld")String kuerzel) {
 		try{
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			Feld feld=spiel.getBrett().getFeld(kuerzel);
 			if (feld==null)
 				throw new RuntimeException("getFigur(): Das Feld "+kuerzel+" existiert nicht!");
 			Figur figur=feld.getFigur();
 			if (figur==null)
 				return Xml.verpacken((new D_OK("null").toXml()));
+			return Xml.verpacken(figur.toXml());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
+		}
+	}
+	
+	@GET
+	@Path("getKoenig/{weiss}")
+	@Consumes("text/plain")
+	@Produces("application/xml")
+	@Override
+	public String getKoenig(
+			@PathParam("weiss") boolean weiss) {
+		try{
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
+			Figur figur=spiel.getKoenig(weiss);
 			return Xml.verpacken(figur.toXml());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,6 +176,7 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 	public String getErlaubteZuege(
 			@PathParam("feld")String kuerzel) {
 		try{
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			Feld feld=spiel.getBrett().getFeld(kuerzel);
 			if (feld==null)
 				throw new RuntimeException("getFigur(): Das Feld "+kuerzel+" existiert nicht!");
@@ -127,6 +209,7 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 			@PathParam("feldVon") String feldVon,
 			@PathParam("feldNach") String feldNach){
 		try{
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			spiel.getRegelwerk().ziehe(feldVon,feldNach);
 			return Xml.verpacken((new D_OK().toXml()));
 		} catch (Exception e) {
@@ -143,6 +226,7 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 	public String bauerUmwandlung(
 			@PathParam("zuFigur") String zuFigur) {
 		try{
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			spiel.getRegelwerk().bauernUmwandlung(zuFigur);
 			return Xml.verpacken(Xml.fromD(spiel.toD()));
 		} catch (Exception e) {
@@ -173,6 +257,19 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 		try{
 			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
 			return Xml.verpacken(Xml.fromArray(spiel.getZugHistorie()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
+		}
+	}
+
+	@Override
+	public String getLetzterZug() {
+		try{
+			if (spiel==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch kein Spiel!")));
+			D zug=spiel.getLetzterZug();
+			if (zug==null) return Xml.verpacken(Xml.fromD(new D_Fehler("Es gibt noch keinen Zug in diesem Spiel!")));
+			return Xml.verpacken(zug.toXml());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return Xml.verpacken(Xml.fromD(new D_Fehler(e.getMessage())));
