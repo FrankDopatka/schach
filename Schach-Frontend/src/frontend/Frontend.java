@@ -52,7 +52,7 @@ public class Frontend extends JFrame{
 	private EventHandler events=null;
 	private BackendSpielStub backendSpiel=null;
 	private BackendSpielAdminStub backendSpielAdmin=null;
-	
+
 	private boolean binWeiss=true;
 	private int zugZaehler=-1;
 
@@ -121,6 +121,21 @@ public class Frontend extends JFrame{
 	public Frontend(String url,boolean binWeiss) {
 		this(url);
 		String s="Franks Schach-Engine ";
+		this.binWeiss=binWeiss;
+		if (binWeiss)
+			setTitle(s+" - Spieler WEISS");
+		else
+			setTitle(s+" - Spieler SCHWARZ");
+		new Updater(this,updateInterval);
+	}
+	
+	public Frontend(String url,boolean binWeiss,KI ki) {
+		this(url);
+		if (ki==null)
+			throw new RuntimeException("Es muss eine gueltige KI uebergeben werden!");
+		ki.init(binWeiss,backendSpiel);
+		ki.start();
+		String s="Franks Schach-Engine "+ki.getInfo();
 		this.binWeiss=binWeiss;
 		if (binWeiss)
 			setTitle(s+" - Spieler WEISS");
