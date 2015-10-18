@@ -51,12 +51,6 @@ public class Updater extends Thread{
 			frontend.setBrett(backendSpiel.getBildSchwarz());
 		if (bemerkungSchach.equals(""+ZugEnum.Patt)) System.out.println("PATT!");
 		frontend.setZugZaehler(zaehlerServer);
-		frontend.resetLog();
-		ArrayList<D> zugHistorie=Xml.toArray(backendSpiel.getZugHistorie());
-		for(D datenwert:zugHistorie){
-			D_Zug zug=(D_Zug)datenwert;
-			frontend.printLog(zug.toPGN());
-			if (zug.getInt("nummer")%2==0) frontend.printlnLog("");
-		}
+		frontend.updateLog();
 	}
 }

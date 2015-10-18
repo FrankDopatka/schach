@@ -21,7 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import daten.D;
+import daten.D_Zug;
 import daten.FigurEnum;
+import daten.Xml;
 import backend.BackendSpielAdminStub;
 import backend.BackendSpielStub;
 
@@ -249,5 +252,16 @@ public class Frontend extends JFrame{
 		JOptionPane.showMessageDialog(this,"Der Einfachheit halber bekommen Sie eine Dame.\nNormalerweise koennen Sie zwischen Dame, Turm, Laeufer oder Springer waehlen!",
 		    "Bauernumwandlung!", JOptionPane.INFORMATION_MESSAGE);
 		backendSpiel.bauerUmwandlung(""+FigurEnum.Dame);
+	}
+
+	public void updateLog() {
+		resetLog();
+		ArrayList<D> zugHistorie=Xml.toArray(backendSpiel.getZugHistorie());
+		for(D datenwert:zugHistorie){
+			D_Zug zug=(D_Zug)datenwert;
+			printLog(zug.toPGN());
+			if (zug.getInt("nummer")%2==0) printlnLog("");
+		}
+
 	}
 }
