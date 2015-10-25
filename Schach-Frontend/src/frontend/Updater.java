@@ -1,7 +1,5 @@
 package frontend;
 
-import java.util.ArrayList;
-
 import backend.BackendSpielStub;
 import daten.*;
 
@@ -49,7 +47,21 @@ public class Updater extends Thread{
 			frontend.setBrett(backendSpiel.getBildWeiss());
 		else
 			frontend.setBrett(backendSpiel.getBildSchwarz());
-		if (bemerkungSchach.equals(""+ZugEnum.Patt)) System.out.println("PATT!");
+		boolean weissMatt=bemerkungSchach.equals(""+ZugEnum.WeissSchachMatt);
+		boolean schwarzMatt=bemerkungSchach.equals(""+ZugEnum.SchwarzSchachMatt);
+		boolean patt=bemerkungSchach.equals(""+ZugEnum.Patt);
+		if (weissMatt||schwarzMatt||patt){
+			// Spiel ist zu Ende
+			if (frontend.ichSpieleWeiss()&&weissMatt) 
+				frontend.log("Leider verloren, ich bin SCHACH MATT :-(");
+			else if (frontend.ichSpieleSchwarz()&&schwarzMatt) 
+				frontend.log("Leider verloren, ich bin SCHACH MATT :-(");
+			else if (patt) 
+				frontend.log("UNENDSCHIEDEN! PATT!");
+			else
+				frontend.log("GEWONNEN! Du bist SCHACH MATT!");
+			frontend.setEnde(true);
+		}	
 		frontend.setZugZaehler(zaehlerServer);
 		frontend.updateLog();
 	}
