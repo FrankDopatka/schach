@@ -186,11 +186,14 @@ public class BackendSpiel extends ResourceConfig implements iBackendSpiel{
 			ArrayList<D> dZuege=new ArrayList<D>();
 			ArrayList<String> sZuege=figur.getErlaubteZuege();
 			figur.removeZuegeSelbstImSchach(sZuege,figur);
-			for(String sZug:sZuege){
+			for(String feldZiel:sZuege){
 				D_Zug d_zug=new D_Zug();
 				d_zug.setString("figur",figur.getKuerzel());
 				d_zug.setString("feldStart",figur.getFeld().getKuerzel());
-				d_zug.setString("feldZiel",sZug);
+				d_zug.setString("feldZiel",feldZiel);
+				Figur figurZiel=spiel.getBrett().getFeld(feldZiel).getFigur();
+				if (figurZiel!=null)
+					d_zug.setString("figurGeschlagen",figurZiel.getKuerzel());
 				dZuege.add(d_zug);
 			}
 			return Xml.verpacken(Xml.fromArray(dZuege));

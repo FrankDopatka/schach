@@ -35,6 +35,7 @@ public class EventHandler implements ActionListener,MouseListener{
 		Object quelle=ev.getSource();
 		if (quelle.equals(frontend.mSpielNeu)){
 			backendSpielAdmin.neuesSpiel();
+			frontend.setEnde(false);
 		} 
 		if (quelle.equals(frontend.mSpielLaden)){
 			backendSpielAdmin.ladenSpiel("spiel.xml");
@@ -55,7 +56,7 @@ public class EventHandler implements ActionListener,MouseListener{
 		if ((x==0)||(y==0)) return;
 		if ((felderErlaubt!=null)&&felderErlaubt.contains(Frontend.toKuerzel(x,y))){
 			if (!frontend.ichBinAmZug()){
-				System.out.println("Sie sind nicht am Zug!");
+				frontend.log("Sie sind nicht am Zug!");
 				return;
 			}
 			// 2. Klick auf ein Feld: Zug durchfuehren

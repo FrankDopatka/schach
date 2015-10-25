@@ -1,4 +1,4 @@
-package ki001;
+package ki;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -53,26 +53,26 @@ public class KI001 extends KI {
 	@Override
 	public void ichHabeVerloren() {
 		if (binWeiss())
-			System.out.println("MIST, die KI "+getInfo()+" (weiss) hat VERLOREN!");
+			getFrontend().log("MIST, die KI "+getInfo()+" (weiss) hat VERLOREN!");
 		else
-			System.out.println("MIST, die KI "+getInfo()+" (schwarz) hat VERLOREN!");
+			getFrontend().log("MIST, die KI "+getInfo()+" (schwarz) hat VERLOREN!");
 	}
 
 	@Override
 	public void ichHabeGewonnen() {
 		if (binWeiss())
-			System.out.println("JUCHU, die KI "+getInfo()+" (weiss) hat GEWONNEN!");
+			getFrontend().log("JUCHU, die KI "+getInfo()+" (weiss) hat GEWONNEN!");
 		else
-			System.out.println("JUCHU, die KI "+getInfo()+" (schwarz) hat GEWONNEN!");
+			getFrontend().log("JUCHU, die KI "+getInfo()+" (schwarz) hat GEWONNEN!");
 	}
 
 	@Override
 	public void patt() {
 		if (binWeiss())
-			System.out.println("NAJA, die KI "+getInfo()+" (weiss)  hat PATT gespielt!");
+			getFrontend().log("NAJA, die KI "+getInfo()+" (weiss)  hat PATT gespielt!");
 		else
-			System.out.println("NAJA, die KI "+getInfo()+" (schwarz) hat PATT gespielt!");
-		System.out.println("Eigentlich eine gute Leistung dafuer, dass ich nur zufaellig ziehe... ;-)");
+			getFrontend().log("NAJA, die KI "+getInfo()+" (schwarz) hat PATT gespielt!");
+		getFrontend().log("Eigentlich eine gute Leistung dafuer, dass ich nur zufaellig ziehe... ;-)");
 	}
 	
 	private int getZufallszahl(int ug,int og){

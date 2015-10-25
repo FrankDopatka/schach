@@ -12,6 +12,7 @@ public abstract class KI extends Thread{
 	private BackendSpielStub backendSpiel;
 	private int pause=1000;
 	private boolean ende=false;
+	private Frontend frontend;
 
 	public KI(String info) {
 		this.info=info;
@@ -58,8 +59,7 @@ public abstract class KI extends Thread{
 				boolean weissMatt=bemerkungSchach.equals(""+ZugEnum.WeissSchachMatt);
 				boolean schwarzMatt=bemerkungSchach.equals(""+ZugEnum.SchwarzSchachMatt);
 				boolean patt=bemerkungSchach.equals(""+ZugEnum.Patt);
-				
-				
+
 				if (weissMatt||schwarzMatt||patt){
 					// Spiel ist zu Ende
 					if (binWeiss()&&weissMatt) 
@@ -94,6 +94,14 @@ public abstract class KI extends Thread{
 
 	public abstract void ichHabeGewonnen();	
 
-	public abstract void patt();	
+	public abstract void patt();
+
+	public void setFrontend(Frontend frontend) {
+		this.frontend=frontend;
+	}
+	
+	public Frontend getFrontend() {
+		return frontend;
+	}	
 }
 
