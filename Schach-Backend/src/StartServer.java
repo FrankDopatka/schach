@@ -4,6 +4,6 @@ import backend.ServerFrontend;
 
 public class StartServer {
 	public static void main(String[] args) throws SecurityException, IOException{
-		new ServerFrontend();
+		new ServerFrontend(); 
 	}
 }
