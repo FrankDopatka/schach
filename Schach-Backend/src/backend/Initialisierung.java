@@ -5,7 +5,7 @@ import daten.D_OK;
 import daten.Xml;
 
 public class Initialisierung {
-	private static String ladeSpiel="/home/informatik/repository_schach/Schach-Backend/spiel.xml";
+	private static String ladeSpiel="/home/informatik/Repository-Schach/schach/Schach-Backend/spiel.xml";
 	
 	public static void ausfuehren(){
 		BackendSpielAdmin administration=new BackendSpielAdmin();
