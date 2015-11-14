@@ -159,7 +159,7 @@ public class ServerFrontend extends JFrame implements ActionListener{
 		if (button[5]==geklicked){
 			// Server Start
 			try {
-				URI uri=UriBuilder.fromUri("http://"+jIP.getText()+"/").port(8000).build();
+				URI uri=UriBuilder.fromUri("http://"+jIP.getText()+"/").port(9000).build();
 		    System.out.println("Starte Server auf "+uri+"... ");	
 		    final ResourceConfig rc=new ResourceConfig().packages("backend"); 
 				server=GrizzlyHttpServerFactory.createHttpServer(uri,rc);
